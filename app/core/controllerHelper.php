@@ -14,6 +14,12 @@ class controllerHelper{
         require 'app/views/template.php';
     }
 
+    public function loadComponent($viewName, $viewData = array()){
+        extract($viewData);
+
+        require 'app/views/'.$viewName.'.php';
+    }
+
     public function loadViewInTemplate($viewName, $viewData = array()){
         extract($viewData);
         require 'app/views/'.$viewName.'.php';

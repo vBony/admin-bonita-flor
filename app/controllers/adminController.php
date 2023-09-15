@@ -4,8 +4,7 @@ class adminController extends controllerHelper{
         $this->loadView('login', array());
     }
 
-    public function home(){
-        echo "olá mundo";
-        // $this->loadTemplate('home', $data);
+    public function cadastrar(){
+        $this->loadView('cadastro-admin', array());
     }
 }
