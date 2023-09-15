@@ -1,6 +1,6 @@
 <?php
-class loginController extends controllerHelper{
-    public function index(){
+class adminController extends controllerHelper{
+    public function login(){
         $this->loadView('login', array());
     }
 
