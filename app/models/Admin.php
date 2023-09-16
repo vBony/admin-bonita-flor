@@ -1,47 +1,69 @@
 <?php
+namespace models;
+use core\modelHelper;
+
+use \PDO;
+use \PDOException;
+
 class Admin extends modelHelper{
 
-    public function getAllData($id){
-        $sql = 'SELECT * FROM admins WHERE id = :id';
+    private $table = 'admin';
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function buscar($id = null){
+        $sql  = "SELECT * FROM {$this->table} ";
+        if(!empty($id)){
+            $sql .= "WHERE id = :id";
+        }
         $sql = $this->db->prepare($sql);
         $sql->bindValue(':id', $id);
         $sql->execute();
 
-        foreach($sql as $dados);
-
-        return $dados;
+        if($sql->rowCount() > 0){
+            if(!empty($id)){
+                return $sql->fetchAll(PDO::FETCH_ASSOC);
+            }else{
+                return $sql->fetch(PDO::FETCH_ASSOC);
+            }
+        }
     }
 
-    public function registerAdmin($name, $email, $password, $token, $ip){
-        $name = ucwords(strtolower($name));
-
-        $first_name = explode(' ', $name);
-        $first_name = $first_name[0];   
-
-        $email = strtolower($email);
-        $password = md5($password);
-        $securityCode = $this->securityCodeGenerator();
-        $admin_hierarchy = 'normal';
-        $first_connection = '1';
-        $admin_ip = $ip;
-
-        
-
-
-        $sql = "INSERT INTO admins(name, first_name, email, senha, last_ip_connection, security_code, admin_hierarchy, first_connection)
-                VALUES (:name, :first_name, :email, :senha, :ip, :sc, :adminhi, :fc)";
+    public function buscarPorEmail($email){
+        $sql = "SELECT * FROM {$this->table} WHERE email = :email";
         $sql = $this->db->prepare($sql);
-        $sql->bindValue(':name', $name);
-        $sql->bindValue(':first_name', $first_name);
-        $sql->bindValue(':email', $email);
-        $sql->bindValue(':senha', $password);
-        $sql->bindValue(':ip', $admin_ip);
-        $sql->bindValue(':sc', $securityCode);
-        $sql->bindValue(':adminhi', $admin_hierarchy);
-        $sql->bindValue(':fc', $first_connection);
+        $sql->bindValue(':email', strtolower($email));
         $sql->execute();
 
-        return true;
+        if($sql->rowCount() > 0){
+           return $sql->fetch(PDO::FETCH_ASSOC);
+        }
+    }
+
+    public function cadastrar($data){
+        $sql = "INSERT INTO {$this->table}
+        (nome, email, senha)
+        VALUES(:nome, :email, :senha);";
+
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':nome', ucfirst(strtolower($data['nome'])));
+        $sql->bindValue(':email', str_replace(' ', '', strtolower($data['email'])));
+        $sql->bindValue(':senha', password_hash($data['senha'], PASSWORD_BCRYPT));
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $id = $this->db->lastInsertId(PDO::FETCH_ASSOC);
+            $this->db->commit();
+
+            return $id;
+        } catch(PDOException $e) {
+            $this->db->rollback();
+            return false;
+        }
     }
 
     private function securityCodeGenerator(){
@@ -70,19 +92,6 @@ class Admin extends modelHelper{
         else
             $ipaddress = 'UNKNOWN';
         return $ipaddress;
-    }
-
-    public function emailVerifier($email){
-        $sql = 'SELECT email FROM admins WHERE email = :email';
-        $sql = $this->db->prepare($sql);
-        $sql->bindValue(':email', $email);
-        $sql->execute();
-
-        if($sql->rowCount() > 0){
-            return true;
-        }else{
-            return false;
-        }
     }
 
     public function signin($email, $password){
