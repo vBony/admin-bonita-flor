@@ -37,21 +37,48 @@
                         <h6 class="m-0 font-weight-bold text-primary">Cadastro</h6>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form class="needs-validation" novalidate>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Nome completo</label>
-                                <input v-model="Admin.nome" type="name" class="form-control" id="nome" placeholder="Ex: Maria dos Santos Ferreira">
+                                <input 
+                                    v-model="Admin.nome" 
+                                    type="name" 
+                                    class="form-control" 
+                                    id="nome" 
+                                    placeholder="Ex: Maria dos Santos Ferreira"
+                                    :class="{ 'is-invalid': errors.nome }"
+                                    @input="errors.nome = null"
+                                >
+                                <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
                             </div>
 
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email</label>
-                                <input v-model="Admin.email" type="email" class="form-control" id="email" placeholder="Ex: maria@hotmail.com">
+                                <input 
+                                    v-model="Admin.email" 
+                                    type="email" 
+                                    class="form-control" 
+                                    id="email" 
+                                    placeholder="Ex: maria@hotmail.com"
+                                    :class="{ 'is-invalid': errors.email }"
+                                    @input="errors.email = null"
+                                >
+                                <div v-if="errors.email" class="invalid-feedback">{{errors.email}}</div>
                             </div>
 
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Senha temporária</label>
-                                <input v-model="Admin.senha" type="password" class="form-control" id="senha" placeholder="Informe uma senha temporária">
-                                <small id="senhaHelp" class="form-text text-muted">Defina uma senha temporária</small>
+                                <input 
+                                    v-model="Admin.senha" 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="senha" 
+                                    placeholder="Informe uma senha temporária"
+                                    :class="{ 'is-invalid': errors.senha }"
+                                    @input="errors.senha = null"
+                                >
+                                <small v-if="errors.senha == null" id="senhaHelp" class="form-text text-muted">Defina uma senha temporária</small>
+                                <div v-if="errors.senha" class="invalid-feedback">{{errors.senha}}</div>
                             </div>
 
                             <button type="submit" @click.prevent="submit()" class="btn btn-primary">Submit</button>
@@ -97,6 +124,11 @@
                         email: '',
                         senha: ''
                     },
+                    errors: {
+                        nome: null,
+                        email: null,
+                        senha: null
+                    },
                     BASE_URL: $('#burl').val()
                 }
             },
@@ -108,6 +140,8 @@
                 submit(){
                     let admin = this.Admin
 
+                    this.limparMensagens()
+
                     $.ajax({
                         type: "POST", // Método da requisição
                         url: `${this.BASE_URL}/api/funcionario/cadastrar`, // URL do servidor
@@ -115,13 +149,24 @@
                         dataType: 'json',
                         success: function (response) {
                             // Função a ser executada em caso de sucesso
-                            console.log("Requisição POST bem-sucedida:", response);
+                            alert("Funcionário cadastrado com sucesso")
                         },
-                        error: function (error) {
-                            // Função a ser executada em caso de erro
-                            console.error("Erro na requisição POST:", error);
+                        error: (error) => {
+                            this.errors = error.responseJSON.errors
                         }
                     });
+                },
+
+                limparMensagens(){
+                    this.errors.nome = null
+                    this.errors.email = null
+                    this.errors.senha = null
+                },
+
+                limparCampos(){
+                    this.Admin.nome = null
+                    this.Admin.email = null
+                    this.Admin.senha = null
                 }
             }
         }

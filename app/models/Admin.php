@@ -15,7 +15,18 @@ class Admin extends modelHelper{
     }
 
     public function buscar($id = null){
-        $sql  = "SELECT * FROM {$this->table} ";
+        $sql  = "SELECT 
+                    id, 
+                    nome, 
+                    foto, 
+                    descricao, 
+                    telefone, 
+                    email, 
+                    dataCriacao, 
+                    excluido, 
+                    ultimoAcesso
+                FROM {$this->table} ";
+        
         if(!empty($id)){
             $sql .= "WHERE id = :id";
         }
@@ -49,7 +60,7 @@ class Admin extends modelHelper{
         VALUES(:nome, :email, :senha);";
 
         $sql = $this->db->prepare($sql);
-        $sql->bindValue(':nome', ucfirst(strtolower($data['nome'])));
+        $sql->bindValue(':nome', ucwords(strtolower($data['nome'])));
         $sql->bindValue(':email', str_replace(' ', '', strtolower($data['email'])));
         $sql->bindValue(':senha', password_hash($data['senha'], PASSWORD_BCRYPT));
 
