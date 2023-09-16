@@ -1,6 +1,9 @@
 <?php
 global $routes;
 $routes = array();
-$routes['/funcionario/cadastrar'] = '/admin/cadastrar';
-$routes['/login'] = '/admin/login';
 $routes['/'] = '/';
+
+// Admin/Funcionadio
+$routes['/funcionario/cadastrar'] = '/admin/viewCadastrar';
+$routes['/login'] = '/admin/viewLogin';
+$routes['/api/funcionario/cadastrar'] = '/admin/apiCadastrar';

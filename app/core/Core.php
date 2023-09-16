@@ -49,7 +49,6 @@ class Core{
     private function checkRoutes($url){
         global $routes;
 
-
         foreach($routes as $pt => $new_url){
             $pattern =  preg_replace('(\{[a-z0-9]{1,}\})' , '([a-z0-9-]{1,})', $pt);
             

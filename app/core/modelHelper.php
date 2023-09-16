@@ -1,10 +1,15 @@
 <?php
+namespace core;
+use core\Database;
 class modelHelper{
     protected $db;
 
-    public function __construct(){
-        global $db;
-        $this->db = $db;
+    public function __construct() {
+        $this->db = Database::getInstance();
+    }   
+
+    public static function createdAt(){
+        return date('Y-m-d H:i:s');
     }
 
     public static function getIpAddress(){

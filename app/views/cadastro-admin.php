@@ -19,12 +19,13 @@
 
     <!-- Custom styles for this template-->
     <link href="<?=BASE_URL?>app/assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 </head>
 
 <body id="page-top">
     <?php $this->loadComponent('header')  ?>
-    <div class="container-fluid">
+    <div class="container-fluid" id="app">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Cadastro de funcionário</h1>
@@ -39,21 +40,21 @@
                         <form>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Nome completo</label>
-                                <input type="name" class="form-control" id="nome" placeholder="Ex: Maria dos Santos Ferreira">
+                                <input v-model="Admin.nome" type="name" class="form-control" id="nome" placeholder="Ex: Maria dos Santos Ferreira">
                             </div>
 
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Ex: maria@hotmail.com">
+                                <input v-model="Admin.email" type="email" class="form-control" id="email" placeholder="Ex: maria@hotmail.com">
                             </div>
 
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Senha temporária</label>
-                                <input type="password" class="form-control" id="senha" placeholder="Informe uma senha temporária">
+                                <input v-model="Admin.senha" type="password" class="form-control" id="senha" placeholder="Informe uma senha temporária">
                                 <small id="senhaHelp" class="form-text text-muted">Defina uma senha temporária</small>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" @click.prevent="submit()" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -82,6 +83,51 @@
     <!-- Page level custom scripts -->
     <script src="<?=BASE_URL?>app/assets/js/demo/chart-area-demo.js"></script>
     <script src="<?=BASE_URL?>app/assets/js/demo/chart-pie-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <input type="hidden" id="burl" value="<?=BASE_URL?>">
+
+    <script>
+        const { createApp } = Vue
+
+        const app = {
+            data() {
+                return {
+                    Admin: {
+                        nome: '',
+                        email: '',
+                        senha: ''
+                    },
+                    BASE_URL: $('#burl').val()
+                }
+            },
+            created() {
+                // alert(this.BASE_URL)
+            },
+
+            methods: {
+                submit(){
+                    let admin = this.Admin
+
+                    $.ajax({
+                        type: "POST", // Método da requisição
+                        url: `${this.BASE_URL}/api/funcionario/cadastrar`, // URL do servidor
+                        data: admin, // Dados no formato JSON
+                        dataType: 'json',
+                        success: function (response) {
+                            // Função a ser executada em caso de sucesso
+                            console.log("Requisição POST bem-sucedida:", response);
+                        },
+                        error: function (error) {
+                            // Função a ser executada em caso de erro
+                            console.error("Erro na requisição POST:", error);
+                        }
+                    });
+                }
+            }
+        }
+
+        createApp(app).mount('#app')
+    </script>
 </body>
 
 </html>
