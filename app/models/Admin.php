@@ -21,17 +21,21 @@ class Admin extends modelHelper{
     public static $FOTO_PERFIL_PADRAO = 'default.png';
     public static $CAMINHO_FOTO_PADRAO = 'app/assets/profile_pics/';
 
+    private $camposSeguros = "
+        id, 
+        nome, 
+        foto, 
+        descricao, 
+        telefone, 
+        email, 
+        dataCriacao, 
+        excluido, 
+        ultimoAcesso
+    ";
+
     public function buscar($id = null){
         $sql  = "SELECT 
-                    id, 
-                    nome, 
-                    foto, 
-                    descricao, 
-                    telefone, 
-                    email, 
-                    dataCriacao, 
-                    excluido, 
-                    ultimoAcesso
+                    {$this->camposSeguros}
                 FROM {$this->table} ";
         
         if(!empty($id)){
@@ -58,7 +62,7 @@ class Admin extends modelHelper{
     }
 
     public function buscarPorEmail($email){
-        $sql = "SELECT * FROM {$this->table} WHERE email = :email";
+        $sql = "SELECT {$this->camposSeguros} FROM {$this->table} WHERE email = :email";
         $sql = $this->db->prepare($sql);
         $sql->bindValue(':email', strtolower($email));
         $sql->execute();

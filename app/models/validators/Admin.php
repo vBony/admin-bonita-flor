@@ -55,7 +55,7 @@ class Admin  {
         }else{
             if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->messages['email'] = "Email inválido"; 
-            }elseif($this->type == 'create'){
+            }elseif($this->type == self::$CRIANDO){
                 $userFind = $Admin->buscarPorEmail($data['email']);
 
                 if(!empty($userFind)){
@@ -69,7 +69,7 @@ class Admin  {
         $pass = $data['senha'];
 
         if(!empty($pass)){
-            if(strlen($pass) < 5 && $this->type == 'create'){
+            if(strlen($pass) < 5 && $this->type == self::$CRIANDO){
                 $this->messages['senha'] = 'A senha deve conter no mínimo 5 caracteres';
             }
         }else{
