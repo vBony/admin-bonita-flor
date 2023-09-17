@@ -1,5 +1,7 @@
 <?php
 namespace models;
+
+use core\controllerHelper;
 use core\modelHelper;
 
 use \PDO;
@@ -13,6 +15,11 @@ class Admin extends modelHelper{
     {
         parent::__construct();
     }
+
+    private $UM_REGISTRO = 'one';
+    private $MULTIPLOS_REGISTROS = 'all';
+    public static $FOTO_PERFIL_PADRAO = 'default.png';
+    public static $CAMINHO_FOTO_PADRAO = 'app/assets/profile_pics/';
 
     public function buscar($id = null){
         $sql  = "SELECT 
@@ -30,15 +37,22 @@ class Admin extends modelHelper{
         if(!empty($id)){
             $sql .= "WHERE id = :id";
         }
+
         $sql = $this->db->prepare($sql);
-        $sql->bindValue(':id', $id);
+
+        if(!empty($id)){
+            $sql->bindValue(':id', $id);
+        }
+
         $sql->execute();
 
         if($sql->rowCount() > 0){
             if(!empty($id)){
-                return $sql->fetchAll(PDO::FETCH_ASSOC);
+                $data = $this->complementarRegistros($sql->fetch(PDO::FETCH_ASSOC), $this->UM_REGISTRO);
+                return $data;
             }else{
-                return $sql->fetch(PDO::FETCH_ASSOC);
+                $data = $this->complementarRegistros($sql->fetchAll(PDO::FETCH_ASSOC), $this->MULTIPLOS_REGISTROS);
+                return $data;
             }
         }
     }
@@ -118,6 +132,30 @@ class Admin extends modelHelper{
         }else{
             return false;
         }
+    }
 
+    private function complementarRegistros($data, $tipoData){
+        if($tipoData == $this->UM_REGISTRO){
+            $data['foto'] = $this->validaAvatar($data['foto']);
+        }else{
+            foreach($data as $i => $registro){
+                $data[$i]['foto'] = $this->validaAvatar($registro['foto']);
+            }
+        }
+
+        return $data;
+    }
+
+    public function validaAvatar($nomeArquivo){
+        $ch = new controllerHelper;
+        $bUrl = $ch->baseUrl();
+
+        $caminho = self::$CAMINHO_FOTO_PADRAO.$nomeArquivo;
+
+        if(!file_exists($caminho) || empty($nomeArquivo)){
+            return $bUrl.self::$CAMINHO_FOTO_PADRAO.self::$FOTO_PERFIL_PADRAO;
+        }else{
+            return $bUrl.$caminho;
+        }
     }
 }

@@ -30,4 +30,12 @@ class adminController extends controllerHelper{
             }
         }
     }
+
+    public function apiListar(){
+        $Model = new Admin();
+
+        $admins = $Model->buscar();
+
+        $this->send(200, ['admins' => $admins]);
+    }
 }

@@ -19,6 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="<?=BASE_URL?>app/assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="<?=BASE_URL?>app/assets/css/cadastro-admin.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 </head>
@@ -87,8 +88,36 @@
                 </div>
             </div>
     
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Funcionários Ativos</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="table-dad" @scroll="scrollHandleFuncionarios($event)">
+                            <table class="table" id="table-list">
+                                <thead id="theadAdmins" class="bg-white">
+                                    <tr id="trTransacoes">
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nome</th>
+                                        <th scope="col" class="text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admins-area">
+                                    <tr v-for="(reg, index) in admins" :key="index">
+                                        <th>
+                                            <div class="profile-pic"><img :src="reg.foto" alt=""></div>
+                                        </th>
+                                        <td class="align-middle">{{reg.nome}}</td>
+                                        <td class="text-center">
+                                            <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -124,16 +153,21 @@
                         email: '',
                         senha: ''
                     },
+
                     errors: {
                         nome: null,
                         email: null,
                         senha: null
                     },
+
+                    admins: [],
+
                     BASE_URL: $('#burl').val()
                 }
             },
-            created() {
-                // alert(this.BASE_URL)
+            mounted() {
+                this.buscarAdmins()
+                console.log(this.admins);
             },
 
             methods: {
@@ -144,7 +178,7 @@
 
                     $.ajax({
                         type: "POST", // Método da requisição
-                        url: `${this.BASE_URL}/api/funcionario/cadastrar`, // URL do servidor
+                        url: `${this.BASE_URL}api/funcionario/cadastrar`, // URL do servidor
                         data: admin, // Dados no formato JSON
                         dataType: 'json',
                         success: function (response) {
@@ -155,6 +189,30 @@
                             this.errors = error.responseJSON.errors
                         }
                     });
+                },
+
+                buscarAdmins(){
+                    $.ajax({
+                        type: "GET", // Método da requisição (GET)
+                        url: `${this.BASE_URL}api/funcionario/listar`, // URL da API ou recurso
+                        dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
+                        success: (data) => {
+                            this.admins = data.admins
+                        },
+                        error: (data) => {
+                            // Função a ser executada em caso de erro
+                            console.error("Erro na requisição GET:", error);
+                        }
+                    });
+                },
+
+                scrollHandleFuncionarios(event){
+                    const scrollTop = event.target.scrollTop;
+
+                    $("#theadAdmins").css({
+                        'transform': `translateY(${scrollTop}px)`,
+                        'box-shadow': 'black 0px 0.3px 0px 0px'
+                    })
                 },
 
                 limparMensagens(){
