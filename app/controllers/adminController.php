@@ -40,6 +40,13 @@ class adminController extends controllerHelper{
     }
 
     public function apiLogin(){
-        $this->send(200, ['admins' => "OK"]);
+        $data = $this->post();
+
+        $adminValidator = new AdminValidator();
+
+        $adminValidator->email($data);
+        $adminValidator->senha($data);
+
+        $this->send(400, ['admins' => $adminValidator->getMessages()]);
     }
 }

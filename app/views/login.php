@@ -42,12 +42,12 @@
                                     </div>
                                     <form class="user">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
+                                            <input :class="{'is-invalid':errors.email}" v-model="Admin.email" type="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Seu e-mail">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
+                                            <input  v-model="Admin.senha" type="password" class="form-control form-control-user"
                                                 id="exampleInputPassword" placeholder="Senha">
                                         </div>
 
@@ -75,7 +75,10 @@
     <!-- Custom scripts for all pages-->
     <script src="<?=BASE_URL?>app/assets/js/sb-admin-2.min.js"></script>
 
+    <input type="hidden" id="burl" value="<?=BASE_URL?>">
+
     <script>
+
         const { createApp } = Vue
 
         const app = {
@@ -95,30 +98,26 @@
                     BASE_URL: $('#burl').val()
                 }
             },
-            
-            created(){
-                alert('ok')
-            },
 
             methods: {
                 submit(){
                     let admin = this.Admin
 
-                    this.limparMensagens()
+                    //this.limparMensagens()
 
-                    // $.ajax({
-                    //     type: "POST", // Método da requisição
-                    //     url: `${this.BASE_URL}api/funcionario/login`, // URL do servidor
-                    //     data: admin, // Dados no formato JSON
-                    //     dataType: 'json',
-                    //     success: (response) => {
-                    //         // Função a ser executada em caso de sucesso
-                    //         console.log(response)
-                    //     },
-                    //     error: (error) => {
-                    //         this.errors = error.responseJSON.errors
-                    //     }
-                    // });
+                    $.ajax({
+                        type: "POST", // Método da requisição
+                        url: `${this.BASE_URL}api/funcionario/login`, // URL do servidor
+                        data: admin, // Dados no formato JSON
+                        dataType: 'json',
+                        success: (response) => {
+                            // Função a ser executada em caso de sucesso
+                            console.log(response)
+                        },
+                        error: (error) => {
+                            this.errors = error.responseJSON.errors
+                        }
+                    });
                 },
 
                 buscarAdmins(){
@@ -146,13 +145,11 @@
                 },
 
                 limparMensagens(){
-                    this.errors.nome = null
                     this.errors.email = null
                     this.errors.senha = null
                 },
 
                 limparCampos(){
-                    this.Admin.nome = null
                     this.Admin.email = null
                     this.Admin.senha = null
                 }
