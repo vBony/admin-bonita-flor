@@ -3,7 +3,7 @@ use core\controllerHelper;
 use models\validators\Admin as AdminValidator;
 use models\Admin;
 class adminController extends controllerHelper{
-    public function login(){
+    public function viewLogin(){
         $this->loadView('login', array());
     }
 
@@ -37,5 +37,9 @@ class adminController extends controllerHelper{
         $admins = $Model->buscar();
 
         $this->send(200, ['admins' => $admins]);
+    }
+
+    public function apiLogin(){
+        $this->send(200, ['admins' => "OK"]);
     }
 }

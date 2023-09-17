@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="utf-8">
@@ -19,7 +18,7 @@
 
     <!-- Custom styles for this template-->
     <link href="<?=BASE_URL?>app/assets/css/sb-admin-2.min.css" rel="stylesheet">
-
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body class="bg-gradient-primary">
@@ -52,9 +51,7 @@
                                                 id="exampleInputPassword" placeholder="Senha">
                                         </div>
 
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
-                                            Entrar
-                                        </a>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Entrar" @click.prevent="submit()">
                                     </form>
                                 </div>
                             </div>
@@ -78,6 +75,92 @@
     <!-- Custom scripts for all pages-->
     <script src="<?=BASE_URL?>app/assets/js/sb-admin-2.min.js"></script>
 
+    <script>
+        const { createApp } = Vue
+
+        const app = {
+            data() {
+                return {
+                    Admin: {
+                        email: '',
+                        senha: ''
+                    },
+
+                    errors: {
+                        email: null,
+                        senha: null
+                    },
+
+                    
+                    BASE_URL: $('#burl').val()
+                }
+            },
+            
+            created(){
+                alert('ok')
+            },
+
+            methods: {
+                submit(){
+                    let admin = this.Admin
+
+                    this.limparMensagens()
+
+                    // $.ajax({
+                    //     type: "POST", // Método da requisição
+                    //     url: `${this.BASE_URL}api/funcionario/login`, // URL do servidor
+                    //     data: admin, // Dados no formato JSON
+                    //     dataType: 'json',
+                    //     success: (response) => {
+                    //         // Função a ser executada em caso de sucesso
+                    //         console.log(response)
+                    //     },
+                    //     error: (error) => {
+                    //         this.errors = error.responseJSON.errors
+                    //     }
+                    // });
+                },
+
+                buscarAdmins(){
+                    $.ajax({
+                        type: "GET", // Método da requisição (GET)
+                        url: `${this.BASE_URL}api/funcionario/listar`, // URL da API ou recurso
+                        dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
+                        success: (data) => {
+                            this.admins = data.admins
+                        },
+                        error: (data) => {
+                            // Função a ser executada em caso de erro
+                            console.error("Erro na requisição GET:", error);
+                        }
+                    });
+                },
+
+                scrollHandleFuncionarios(event){
+                    const scrollTop = event.target.scrollTop;
+
+                    $("#theadAdmins").css({
+                        'transform': `translateY(${scrollTop}px)`,
+                        'box-shadow': 'black 0px 0.3px 0px 0px'
+                    })
+                },
+
+                limparMensagens(){
+                    this.errors.nome = null
+                    this.errors.email = null
+                    this.errors.senha = null
+                },
+
+                limparCampos(){
+                    this.Admin.nome = null
+                    this.Admin.email = null
+                    this.Admin.senha = null
+                }
+            }
+        }
+
+        createApp(app).mount('#app')
+    </script>
 </body>
 
 </html>
