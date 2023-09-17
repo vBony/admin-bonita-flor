@@ -57,17 +57,8 @@ class Admin{
 
     public function setSession($userData){
         $data = array();
-
-        $ip = $this->getIpUser();
-
-        $ModelToken = new AccessToken();
-        $tokenFound = $ModelToken->buscarPorIp($ip, $userData['id']);
-
-        if(!empty($tokenFound)){
-            $data['accessToken'] = $this->setAccessToken($userData, $tokenFound['id'], true);
-        }else{
-            $data['accessToken'] = $this->setAccessToken($userData);
-        }
+        
+        $data['accessToken'] = $this->setAccessToken($userData);
 
         $data['user'] = $userData;
 
@@ -78,25 +69,17 @@ class Admin{
         return $_SESSION['userSession']['accessToken']['idAdmin'];
     }
 
-    public function setAccessToken($userData, $id = null, $recycle = false){
-        $ModelToken = new AccessToken();
+    public function setAccessToken($userData){
+
         $data = array();
-        $data['ip'] = $this->getIpUser();
-        $data['idAdmin'] = $userData['id'];
-        $data['createdAt'] = date('Y-m-d H:i:s');
-        $data['validUntil'] = $this->setTokenLifeTime();
+
+        $data['admin'] = $userData;
+
         $data['token'] = $this->setToken($userData);
 
-        if(!$recycle && $id == null){
-            if($ModelToken->criar($data)){
-                return $data;
-            }
-        }else{
-            $data['id'] = $id;
-            if($ModelToken->recycleToken($data)){
-                return $data;
-            }
-        }
+        $_SESSION["sessionData"] = $data;
+
+
     }
 
     public function getIpUser(){

@@ -42,13 +42,19 @@
                                     </div>
                                     <form class="user">
                                         <div class="form-group">
-                                            <input :class="{'is-invalid':errors.email}" v-model="Admin.email" type="email" class="form-control form-control-user"
+                                            <input  v-model="Admin.email" type="email" class="form-control form-control-user"
+                                                @input="errors.email = null"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Seu e-mail">
+                                                placeholder="Seu e-mail"
+                                                :class="{'is-invalid':errors.email}">
+                                            <div v-if="errors.email" class="invalid-feedback">{{errors.email}}</div>
                                         </div>
                                         <div class="form-group">
                                             <input  v-model="Admin.senha" type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Senha">
+                                                id="exampleInputPassword" placeholder="Senha"
+                                                @input="errors.senha = null"
+                                                :class="{ 'is-invalid': errors.senha }">
+                                            <div v-if="errors.senha" class="invalid-feedback">{{errors.senha}}</div>
                                         </div>
 
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Entrar" @click.prevent="submit()">
@@ -112,7 +118,7 @@
                         dataType: 'json',
                         success: (response) => {
                             // Função a ser executada em caso de sucesso
-                            console.log(response)
+                            window.location.href = this.BASE_URL
                         },
                         error: (error) => {
                             this.errors = error.responseJSON.errors

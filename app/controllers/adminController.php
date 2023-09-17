@@ -2,6 +2,7 @@
 use core\controllerHelper;
 use models\validators\Admin as AdminValidator;
 use models\Admin;
+use auth\Admin as AdminAuth;
 class adminController extends controllerHelper{
     public function viewLogin(){
         $this->loadView('login', array());
@@ -42,11 +43,13 @@ class adminController extends controllerHelper{
     public function apiLogin(){
         $data = $this->post();
 
-        $adminValidator = new AdminValidator();
+        $auth = new AdminAuth();
+        $login = $auth->login($data);
 
-        $adminValidator->email($data);
-        $adminValidator->senha($data);
-
-        $this->send(400, ['admins' => $adminValidator->getMessages()]);
+        if($login == true){
+            $this->send(200);
+        }else {
+            $this->send(400, ['error' => $login]);
+        }
     }
 }

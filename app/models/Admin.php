@@ -30,7 +30,8 @@ class Admin extends modelHelper{
         email, 
         dataCriacao, 
         excluido, 
-        ultimoAcesso
+        ultimoAcesso,
+        senha
     ";
 
     public function buscar($id = null){

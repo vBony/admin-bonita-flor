@@ -33,7 +33,7 @@ class controllerHelper{
         require 'app/views/'.$viewName.'.php';
     }
 
-    public function send(int $code, array $message){
+    public function send(int $code, array $message = array()){
         http_response_code($code);
         $message = json_encode($message);
         
