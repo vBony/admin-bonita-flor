@@ -186,4 +186,26 @@ class Admin extends modelHelper{
             return $bUrl.$caminho;
         }
     }
+
+    public function setTokenPorId($id, $token){
+        $sql = "UPDATE admin SET token = :token WHERE id = :id";
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':token', $token);
+        $sql->bindValue(':id', $id);
+        $sql->execute();
+
+        return true;
+    }
+
+    public function buscarPorToken($token){
+        $sql = "SELECT {$this->camposSeguros} FROM admin WHERE token = :token";
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':token', $token);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            return $sql->fetch(PDO::FETCH_ASSOC);
+         }
+    }
+
 }

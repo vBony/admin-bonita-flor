@@ -25,7 +25,7 @@
 </head>
 
 <body id="page-top">
-    <?php $this->loadComponent('header')  ?>
+    <?php $this->loadComponent('header', $component)  ?>
     <div class="container-fluid" id="app">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">

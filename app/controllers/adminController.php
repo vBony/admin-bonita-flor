@@ -9,7 +9,17 @@ class adminController extends controllerHelper{
     }
 
     public function viewCadastrar(){
-        $this->loadView('cadastro-admin', array());
+        $auth = new AdminAuth();
+        $auth->isLogged();
+
+        $idAdmin = $auth->getIdUserLogged();
+
+        $admin = new Admin();
+        $admin = $admin->buscar($idAdmin);
+
+        $data['component'] = $admin;
+
+        $this->loadView('cadastro-admin', $data);
     }
 
     public function apiCadastrar(){

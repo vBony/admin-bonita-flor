@@ -24,7 +24,7 @@
 
 <body id="page-top">
 
-    <?php $this->loadComponent('header')  ?>
+    <?php $this->loadComponent('header', $component)  ?>
 
     <!-- Begin Page Content -->
     <div class="container-fluid">

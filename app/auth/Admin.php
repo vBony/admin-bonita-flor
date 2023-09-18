@@ -4,6 +4,7 @@ namespace auth;
 use models\Admin as ModelAdmin;
 use models\AccessToken;
 use models\validators\Admin as AdminValidator;
+use core\controllerHelper;
 
 class Admin{
     private $Admin;
@@ -34,7 +35,7 @@ class Admin{
                 if($this->validatePassword($data['senha'], $userFind['senha'])){
                     //Realizando a busca novamente para não salvar na sessão a senha
                     $userData =  $this->Admin->buscarPorEmail($data['email']);
-
+                    
                     $this->setSession($userData);
                     
                     return true;
@@ -61,29 +62,17 @@ class Admin{
 
     public function setSession($userData){
         $data = array();
-        
-        $data['accessToken'] = $this->setAccessToken($userData);
-
+        $data['accessToken'] = $this->setToken($userData);
         $data['user'] = $userData;
+
+        $admin = new ModelAdmin();
+        $admin->setTokenPorId($userData['id'], $data['accessToken']);
 
         $_SESSION['userSession'] = $data;
     }
 
     public function getIdUserLogged(){
-        return $_SESSION['userSession']['accessToken']['idAdmin'];
-    }
-
-    public function setAccessToken($userData){
-
-        $data = array();
-
-        $data['admin'] = $userData;
-
-        $data['token'] = $this->setToken($userData);
-
-        $_SESSION["sessionData"] = $data;
-
-
+        return $_SESSION['userSession']['user']['id'];
     }
 
     public function getIpUser(){
@@ -116,8 +105,8 @@ class Admin{
         if(!isset($_SESSION['userSession'])){
             $this->goToLogin();
         }else{
-            $tokenSession = $_SESSION['userSession']['accessToken']['token'];
-            $idUser = $_SESSION['userSession']['accessToken']['idAdmin'];
+            $tokenSession = $_SESSION['userSession']['accessToken'];
+            $idUser = $_SESSION['userSession']['user']['id'];
 
             if(!empty($tokenSession) && !empty($idUser)){
                 if(!$this->validateToken($tokenSession, $idUser)){
@@ -131,29 +120,15 @@ class Admin{
     }
 
     public function validateToken($token, $idUser){
-        $ModelToken = new AccessToken();
-
-        $ip = $this->getIpUser();
-        $now = date('Y-m-d H:i:s');
-
+        $ModelToken = new ModelAdmin();
         $tokenFind = $ModelToken->buscarPorToken($token);
 
         // Token existe?
         if(!empty($tokenFind)){
             // O usuário é dono desse token?
-            if($tokenFind['idAdmin'] == $idUser){
-                // O ip do usuário é o mesmo do token?
-                if($ip == $tokenFind['ip']){
-                    // Esse token está ativo?
-                    if($tokenFind['active'] == 1){
-                        // Esse token está vencido?
-                        if(strtotime($now) < strtotime($tokenFind['validUntil'])){
-                            return true;
-                        }
-                    }
-                }
+            if($tokenFind['id'] == $idUser){
+                return true;
             }
-            
             return false;
         }else{
             return false;
@@ -161,7 +136,8 @@ class Admin{
     }
 
     public function goToLogin(){
-        $loginUrl = \core\controllerHelper::getBaseUrl() . 'login';
+        $ch = new controllerHelper;
+        $loginUrl = $ch->baseUrl() . 'login';
 
         header("Location: $loginUrl");
     }

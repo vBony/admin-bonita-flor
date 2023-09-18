@@ -18,7 +18,7 @@ class controllerHelper{
         require 'app/models/validators/'.$validatorName.'.php';
     }
 
-    public function baseUrl(){
+    public static function baseUrl(){
         return $_ENV['BASE_URL'];
     }
 
