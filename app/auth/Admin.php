@@ -28,11 +28,15 @@ class Admin{
         $AdminValidator->senha($data);
 
         if(empty($AdminValidator->getMessages())){
-            $userFind = $this->Admin->buscarPorEmail($data['email']);
+            $userFind = $this->Admin->buscarPorEmailNaoSeguro($data['email']);
 
             if(!empty($userFind)){
                 if($this->validatePassword($data['senha'], $userFind['senha'])){
-                    $this->setSession($userFind);
+                    //Realizando a busca novamente para não salvar na sessão a senha
+                    $userData =  $this->Admin->buscarPorEmail($data['email']);
+
+                    $this->setSession($userData);
+                    
                     return true;
                 }else{
                     $messages['senha'] = 'Senha inválida';

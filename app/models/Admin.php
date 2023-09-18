@@ -30,6 +30,18 @@ class Admin extends modelHelper{
         email, 
         dataCriacao, 
         excluido, 
+        ultimoAcesso
+    ";
+
+    private $campos = "
+        id, 
+        nome, 
+        foto, 
+        descricao, 
+        telefone, 
+        email, 
+        dataCriacao, 
+        excluido, 
         ultimoAcesso,
         senha
     ";
@@ -64,6 +76,17 @@ class Admin extends modelHelper{
 
     public function buscarPorEmail($email){
         $sql = "SELECT {$this->camposSeguros} FROM {$this->table} WHERE email = :email";
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':email', strtolower($email));
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+           return $sql->fetch(PDO::FETCH_ASSOC);
+        }
+    }
+
+    public function buscarPorEmailNaoSeguro($email){
+        $sql = "SELECT {$this->campos} FROM {$this->table} WHERE email = :email";
         $sql = $this->db->prepare($sql);
         $sql->bindValue(':email', strtolower($email));
         $sql->execute();
