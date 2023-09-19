@@ -3,7 +3,7 @@ use core\controllerHelper;
 use auth\Admin;
 use models\Admin as ModelAdmin;
 class servicosController extends controllerHelper{
-    public function index(){
+    public function viewCadastrar(){
         $auth = new Admin();
         $auth->isLogged();
 
@@ -14,7 +14,7 @@ class servicosController extends controllerHelper{
 
         $data['component'] = $admin;
 
-        $this->loadView('servicos', $data);
+        $this->loadView('cadastro-servicos', $data);
     }
 
 }
