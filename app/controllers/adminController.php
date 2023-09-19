@@ -9,13 +9,7 @@ class adminController extends controllerHelper{
     }
 
     public function viewCadastrar(){
-        $auth = new AdminAuth();
-        $auth->isLogged();
-
-        $idAdmin = $auth->getIdUserLogged();
-
-        $admin = new Admin();
-        $admin = $admin->buscar($idAdmin);
+        $admin = $this->isLogged();
 
         $data['component'] = $admin;
 

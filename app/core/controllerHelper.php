@@ -1,5 +1,7 @@
 <?php
 namespace core;
+use auth\Admin as AdminAuth;
+use models\Admin as AdminModel;
 class controllerHelper{
 
     public function loadView($viewName, $viewData = array(), $show_header = true){
@@ -50,6 +52,16 @@ class controllerHelper{
         }
 
         return null;
+    }
+
+    public function isLogged(){
+        $auth = new AdminAuth();
+        $auth->isLogged();
+
+        $idAdmin = $auth->getIdUserLogged();
+
+        $admin = new AdminModel();
+        return $admin->buscar($idAdmin);
     }
 }
 
