@@ -56,10 +56,10 @@ class adminController extends controllerHelper{
         $auth = new AdminAuth();
         $login = $auth->login($data);
 
-        if($login == true){
+        if(is_bool($login) && $login === true){
             $this->send(200);
         }else {
-            $this->send(400, ['error' => $login]);
+            $this->send(400, ['errors' => $login]);
         }
     }
 }
