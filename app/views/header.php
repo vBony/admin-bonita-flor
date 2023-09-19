@@ -52,7 +52,7 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="<?=BASE_URL?>/servicos">
             <i class="fas fa-edit"></i>
             <span>Serviços</span>
         </a>
@@ -91,7 +91,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=$nome?></span>
-                        <img class="img-profile rounded-circle object-fit-cover border rounded"
+                        <img class="img-profile rounded-circle"
                             src="<?=$foto?>">
                     </a>
                     <!-- Dropdown - User Information -->
