@@ -38,73 +38,75 @@
                         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                             <h4 class="text-primary">Informações Pessoais</h4>
 
-                            <div class="col-12 my-4 d-flex align-items-center">
-                                <img :src="admin.foto" class="profile-photo" alt="">
-                                <div class="d-flex flex-column ml-4">
-                                    <div class="font-weight-bold">{{admin.nome}}</div>
-                                    <a href="">Alterar foto de perfil</a>
+                            <form>
+                                <div class="col-12 my-4 d-flex align-items-center">
+                                    <img :src="admin.foto" class="profile-photo" alt="">
+                                    <div class="d-flex flex-column ml-4">
+                                        <div class="font-weight-bold">{{admin.nome}}</div>
+                                        <a href="">Alterar foto de perfil</a>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Nome completo</label>
-                                <input 
-                                    v-model="admin.nome" 
-                                    type="name" 
-                                    class="form-control" 
-                                    id="nome" 
-                                    placeholder="Ex: Maria dos Santos Ferreira"
-                                    :class="{ 'is-invalid': errors.nome }"
-                                    @input="errors.nome = null"
-                                >
-                                <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email</label>
-                                <input 
-                                    v-model="admin.email" 
-                                    type="email" 
-                                    class="form-control" 
-                                    id="email" 
-                                    placeholder="Ex: maria@hotmail.com"
-                                    :class="{ 'is-invalid': errors.email }"
-                                    @input="errors.email = null"
-                                >
-                                <div v-if="errors.email" class="invalid-feedback">{{errors.email}}</div>
-                            </div>
-                        
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Sobre mim</label>
-                                <textarea 
-                                    v-model="admin.descricao" 
-                                    class="form-control" 
-                                    id="descricao" 
-                                    rows="5"
-                                    :class="{ 'is-invalid': errors.descricao }"
-                                    @input="errors.descricao = null"
-                                    placeholder="Um breve texto sobre sua carreira e experiências profissionais"
-                                >
-                                </textarea>
-                                <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Senha</label>
-                                <input 
-                                    v-model="admin.senha" 
-                                    type="password" 
-                                    class="form-control" 
-                                    id="senha" 
-                                    :class="{ 'is-invalid': errors.senha }"
-                                    @input="errors.senha = null"
-                                >
-                                <div v-if="errors.senha" class="invalid-feedback">{{errors.senha}}</div>
-                            </div>
-
-                            <div class="form-group mt-4">
-                                <input type="submit" class="btn btn-success form-control" value="Alterar">
-                            </div>
+    
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Nome completo</label>
+                                    <input 
+                                        v-model="admin.nome" 
+                                        type="name" 
+                                        class="form-control" 
+                                        id="nome" 
+                                        placeholder="Ex: Maria dos Santos Ferreira"
+                                        :class="{ 'is-invalid': errors.nome }"
+                                        @input="errors.nome = null"
+                                    >
+                                    <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
+                                </div>
+    
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email</label>
+                                    <input 
+                                        v-model="admin.email" 
+                                        type="email" 
+                                        class="form-control" 
+                                        id="email" 
+                                        placeholder="Ex: maria@hotmail.com"
+                                        :class="{ 'is-invalid': errors.email }"
+                                        @input="errors.email = null"
+                                    >
+                                    <div v-if="errors.email" class="invalid-feedback">{{errors.email}}</div>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Sobre mim</label>
+                                    <textarea 
+                                        v-model="admin.descricao" 
+                                        class="form-control" 
+                                        id="descricao" 
+                                        rows="5"
+                                        :class="{ 'is-invalid': errors.descricao }"
+                                        @input="errors.descricao = null"
+                                        placeholder="Um breve texto sobre sua carreira e experiências profissionais"
+                                    >
+                                    </textarea>
+                                    <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                </div>
+    
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Senha</label>
+                                    <input 
+                                        v-model="admin.senha" 
+                                        type="password" 
+                                        class="form-control" 
+                                        id="senha" 
+                                        :class="{ 'is-invalid': errors.senha }"
+                                        @input="errors.senha = null"
+                                    >
+                                    <div v-if="errors.senha" class="invalid-feedback">{{errors.senha}}</div>
+                                </div>
+    
+                                <div class="form-group mt-4">
+                                    <input type="submit" class="btn btn-success form-control" value="Alterar">
+                                </div>
+                            </form>
                         </div>
 
                         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
