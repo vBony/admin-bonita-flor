@@ -56,4 +56,17 @@ class adminController extends controllerHelper{
             $this->send(400, ['errors' => $login]);
         }
     }
+
+    public function viewAlterarAdmin(){
+        $admin = $this->isLogged();
+        $data['component'] = $admin;
+
+        $this->loadView('perfil', $data);
+    }
+
+    public function apiBuscar(){
+        $admin = $this->isLogged();
+
+        $this->send(200, ['admin' => $admin]);
+    }
 }
