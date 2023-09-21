@@ -88,17 +88,17 @@ class Admin{
     }
 
     public function killSession(){
-        $ModelToken = new AccessToken();
-        $ipUser = $this->getIpUser();
+        // $ModelToken = new AccessToken();
+        // $ipUser = $this->getIpUser();
 
-        if(isset($_SESSION['userSession'])){
-            $tokenFind = $ModelToken->buscarPorToken($_SESSION['userSession']['accessToken']['token']);
+        // if(isset($_SESSION['userSession'])){
+        //     $tokenFind = $ModelToken->buscarPorToken($_SESSION['userSession']['accessToken']['token']);
 
-            if(!empty($tokenFind) && $ipUser == $tokenFind['ip']){
-                $ModelToken->matarToken($tokenFind['id']);
-                unset($_SESSION['userSession']);
-            }
-        }
+        //     if(!empty($tokenFind) && $ipUser == $tokenFind['ip']){
+        //         $ModelToken->matarToken($tokenFind['id']);
+        //         unset($_SESSION['userSession']);
+        //     }
+        // }
     }
 
     public function isLogged(){

@@ -3,6 +3,7 @@ use core\controllerHelper;
 use models\validators\Admin as AdminValidator;
 use models\Admin;
 use auth\Admin as AdminAuth;
+use models\Categoria;
 class adminController extends controllerHelper{
     public function viewLogin(){
         $this->loadView('login', array());
@@ -65,8 +66,16 @@ class adminController extends controllerHelper{
     }
 
     public function apiBuscar(){
-        $admin = $this->isLogged();
+        $Categoria = new Categoria;
 
-        $this->send(200, ['admin' => $admin]);
+        $admin = $this->isLogged();
+        $categorias = $Categoria->buscar();
+
+        $this->send(200, [
+            'admin' => $admin,
+            'listas' => [
+                'categorias' => $categorias 
+            ]
+        ]);
     }
 }

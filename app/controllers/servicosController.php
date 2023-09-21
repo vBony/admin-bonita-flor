@@ -1,7 +1,6 @@
 <?php
 use core\controllerHelper;
-use auth\Admin;
-use models\Admin as ModelAdmin;
+use models\Servico;
 class servicosController extends controllerHelper{
     public function viewCadastrar(){
         $admin = $this->isLogged();
@@ -10,5 +9,16 @@ class servicosController extends controllerHelper{
 
         $this->loadView('cadastro-servicos', $data);
     }
+
+    public function apiBuscarPorCategoria(){
+        $model = new Servico();
+        $idCategoria = $this->post('idCategoria');
+
+        if(!empty($idCategoria)){
+            $this->send(200, ['servicos' => $model->buscarPorCategoria($idCategoria)]);
+        }
+    }
+
+    
 
 }

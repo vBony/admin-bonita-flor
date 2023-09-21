@@ -96,21 +96,82 @@
                                         v-model="admin.senha" 
                                         type="password" 
                                         class="form-control" 
-                                        id="senha" 
+                                        id="alterarSenha" 
+                                        autocomplete="one-time-code"
                                         :class="{ 'is-invalid': errors.senha }"
                                         @input="errors.senha = null"
                                     >
                                     <div v-if="errors.senha" class="invalid-feedback">{{errors.senha}}</div>
                                 </div>
     
-                                <div class="form-group mt-4">
+                                <div class="form-group my-4">
                                     <input type="submit" class="btn btn-success form-control" value="Alterar">
                                 </div>
                             </form>
                         </div>
 
                         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                            <h4 class="text-primary">Seus serviços</h4>
+                            <h4 class="text-primary">Especialidades</h4>
+
+                            <p class="text-muted">Selecione os serviços que você pode atender.</p>
+                            <form>
+                                <div class="form-row align-items-center">
+                                    <div class="col-lg-5 col-md-12 mb-3">
+                                        <label for="categoriaCadastro">Categoria</label>
+                                        <select 
+                                            class="form-control" 
+                                            id="categoriaCadastro" 
+                                            v-model="servico.idCategoria" 
+                                            @change="buscarServico(); errors.adminServico.categoria = null"
+                                            :class="{ 'is-invalid': errors.adminServico.categoria }"
+                                            
+                                        >
+                                            <option selected>Selecione</option>
+                                            <option :value="reg.id" v-for="(reg, index) in categorias">{{reg.descricao}}</option>
+                                        </select>
+                                        <div v-if="errors.adminServico.categoria" class="invalid-feedback">{{errors.adminServico.categoria}}</div>
+                                    </div>
+                                    <div class="col-lg-5 col-md-12 mb-3">
+                                        <label for="categoriaCadastro">Serviço</label>
+                                        <select 
+                                            class="form-control" 
+                                            id="servicoCadastro" 
+                                            v-model="servico.idServico" 
+                                            :disabled="servico.idCategoria == null"
+                                            @change="errors.adminServico.servico = null"
+                                            :class="{ 'is-invalid': errors.adminServico.servico }"
+                                        >
+                                            <option selected>Selecione</option>
+                                            <option :value="reg.id" v-for="(reg, index) in servicos">{{reg.nome}}</option>
+                                        </select>
+                                        <div v-if="errors.adminServico.servico" class="invalid-feedback">{{errors.adminServico.servico}}</div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-12 mb-3">
+                                        <label for="categoriaCadastro">&nbsp;</label>
+                                        <input type="submit" @click.prevent="inserirServico()" class="btn btn-success form-control" value="Adicionar">
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                            <h4 class="text-secondary">Suas Especialidades</h4>
+                            <div id="table-dad" @scroll="scrollHandleFuncionarios($event)">
+                                <table class="table" id="table-list">
+                                    <thead id="theadAdmins" class="bg-white">
+                                        <tr id="trTransacoes">
+                                            <th scope="col">Nome</th>
+                                            <th scope="col" class="text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="servicos-area">
+                                        <tr v-for="(reg, index) in adminServicos" :key="index">
+                                            <td class="align-middle">{{reg.nome}}</td>
+                                            <td class="text-center">
+                                                <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -162,7 +223,25 @@
                         telefone: null,
                         email: null,
                         senha: null,
+                        adminServico: {
+                            servico: null,
+                            categoria: null
+                        }
                     },
+
+                    servico: {
+                        idCategoria: null,
+                        idServico: null
+                    },
+
+                    servicos: [],
+
+                    categorias: [],
+
+                    adminServicos: [
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"}
+                    ],
                     
                     BASE_URL: $('#burl').val()
                 }
@@ -172,22 +251,24 @@
             },
 
             methods: {
-                submit(){
-                    let admin = this.Admin
+                inserirServico(){
+                    let servico = this.servico
 
                     this.limparMensagens()
 
                     $.ajax({
                         type: "POST", // Método da requisição
-                        url: `${this.BASE_URL}api/funcionario/cadastrar`, // URL do servidor
-                        data: admin, // Dados no formato JSON
+                        url: `${this.BASE_URL}api/admin-servicos/cadastrar`, // URL do servidor
+                        data: servico, // Dados no formato JSON
                         dataType: 'json',
                         success: function (response) {
                             // Função a ser executada em caso de sucesso
                             alert("Funcionário cadastrado com sucesso")
                         },
                         error: (error) => {
-                            this.errors = error.responseJSON.errors
+                            this.errors.adminServico = error.responseJSON.errors
+
+                            console.log(this.errors);
                         }
                     });
                 },
@@ -199,10 +280,27 @@
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
                         success: (data) => {
                             this.admin = data.admin
+                            this.categorias = data.listas.categorias
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
                             console.error("Erro na requisição GET:", error);
+                        }
+                    });
+                },
+
+                buscarServico(){
+                    $.ajax({
+                        type: "post", // Método da requisição (GET)
+                        url: `${this.BASE_URL}api/servicos/buscar-por-categoria`, // URL da API ou recurso
+                        dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
+                        data: {idCategoria: this.servico.idCategoria},
+                        success: (data) => {
+                            this.servicos = data.servicos
+                        },
+                        error: (data) => {
+                            // Função a ser executada em caso de erro
+                            console.error("Erro na requisição GET:", data);
                         }
                     });
                 },
