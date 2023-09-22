@@ -43,20 +43,23 @@ class modelHelper{
         return implode(",", $retorno);
     }
 
-    public function mapear($dados){
+    public static function mapear($dados, $sufix){
+        $retorno = array();
+        foreach($dados as $chave => $coluna){
+            $arrChave = explode("_", $chave);
 
-    }
+            if(isset($arrChave[0]) && !empty($arrChave[0])){
+                if($arrChave[0] == $sufix){
+                    $data = $coluna;
+                    $nomeColuna = $arrChave[1];
 
-    public function mapearAgregado($chave, $dados){
+                    $retorno[$nomeColuna] = $data;
+                }
+            }
+            
+        }
 
-    }
-
-    public function mapearLista($dados){
-
-    }
-
-    public function mapearListaAgregado($chave, $dados){
-
+        return $retorno;
     }
 }
 ?>

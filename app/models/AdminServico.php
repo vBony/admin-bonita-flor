@@ -109,7 +109,7 @@ class AdminServico extends modelHelper{
 
             $data = $sql->fetchAll(PDO::FETCH_NAMED);
 
-            //adicionar mapeamento
+            return $this->setMapeamentoLista($data);
         }
     }
 
@@ -138,5 +138,23 @@ class AdminServico extends modelHelper{
 
             return false;
         }
+    }
+
+    private function setMapeamento($dados){
+        $registro = parent::mapear($dados, self::$sufix);
+        $registro['servico'] = parent::mapear($dados, Servico::$sufix);
+        $registro['servico']['categoria'] = parent::mapear($dados, Categoria::$sufix);
+
+        return array_filter($registro);
+    }
+
+    public function setMapeamentoLista($dados){
+        $lista = array();
+
+        foreach($dados as $chave => $dado){
+            $lista[$chave] = $this->setMapeamento($dado);
+        }
+
+        return $lista;
     }
 }
