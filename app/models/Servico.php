@@ -9,8 +9,7 @@ class Servico extends modelHelper{
 
     public $table = 'servico';
     public static $sufix = 'svc';
-
-    public $attrs = [
+    public static $attrs = [
         'id',
         'idCategoria',
         'descricao',
@@ -20,11 +19,8 @@ class Servico extends modelHelper{
         'excluido'
     ];
 
-    public $colunas;
-
     public function __construct()
     {
-        $this->colunas = $this->setColunas(self::$sufix, $this->attrs);
         parent::__construct();
     }
 
@@ -71,5 +67,9 @@ class Servico extends modelHelper{
             $data = $sql->fetchAll(PDO::FETCH_ASSOC);
             return $data;
         }
+    }
+
+    public static function getColunas(){
+        parent::setColunas(self::$sufix, self::$attrs);
     }
 }

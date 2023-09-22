@@ -9,9 +9,7 @@ class AdminServico extends modelHelper{
 
     public $table = 'adminServico';
     public static $sufix = 'ads';
-
-    public $colunas;
-    public $attrs = [
+    public static $attrs = [
         'id',
         'idServico',
         'idAdmin',
@@ -20,7 +18,6 @@ class AdminServico extends modelHelper{
 
     public function __construct()
     {
-        $this->colunas = $this->setColunas(self::$sufix, $this->attrs);
         parent::__construct();
     }
 
@@ -76,16 +73,13 @@ class AdminServico extends modelHelper{
     }
 
     public function buscarPorAdmin($idAdmin){
-        $Servico = new Servico();
-        $Categoria = new Categoria();
-
         $sufix = self::$sufix;
-        $colunas = $this->colunas;
+        $colunas = self::getColunas();
 
-        $colunasServico = $Servico->colunas;
         $sufixServico = Servico::$sufix;
+        $colunasServico = Servico::getColunas();
 
-        $colunasCategoria = $Categoria->colunas;
+        $colunasCategoria = Categoria::getColunas();
         $sufixCategoria = Categoria::$sufix;
 
         $sql  = "SELECT 
@@ -148,7 +142,7 @@ class AdminServico extends modelHelper{
         return array_filter($registro);
     }
 
-    public function setMapeamentoLista($dados){
+    private function setMapeamentoLista($dados){
         $lista = array();
 
         foreach($dados as $chave => $dado){
@@ -156,5 +150,9 @@ class AdminServico extends modelHelper{
         }
 
         return $lista;
+    }
+
+    public static function getColunas(){
+        return parent::setColunas(self::$sufix, self::$attrs);
     }
 }

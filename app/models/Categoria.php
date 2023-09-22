@@ -11,9 +11,7 @@ class Categoria extends modelHelper{
 
     public $table = 'categoria';
     public static $sufix = 'cat';
-
-    public $colunas;
-    public $attrs = [
+    public static $attrs = [
         'id',
         'descricao',
         'excluido'
@@ -21,8 +19,6 @@ class Categoria extends modelHelper{
 
     public function __construct()
     {
-
-        $this->colunas = $this->setColunas(self::$sufix, $this->attrs);
         parent::__construct();
     }
 
@@ -53,5 +49,9 @@ class Categoria extends modelHelper{
                 return $data;
             }
         }
+    }
+
+    public static function getColunas(){
+        parent::setColunas(self::$sufix, self::$attrs);
     }
 }
