@@ -164,7 +164,7 @@
                                     </thead>
                                     <tbody id="servicos-area">
                                         <tr v-for="(reg, index) in adminServicos" :key="index">
-                                            <td class="align-middle">{{reg.nome}}</td>
+                                            <td class="align-middle">{{reg.servico.nome}}</td>
                                             <td class="text-center">
                                                 <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
                                             </td>
@@ -238,10 +238,7 @@
 
                     categorias: [],
 
-                    adminServicos: [
-                        {id: 23, nome: "Unha de gel"},
-                        {id: 23, nome: "Alongamento de unha"}
-                    ],
+                    adminServicos: [],
                     
                     BASE_URL: $('#burl').val()
                 }
@@ -257,18 +254,15 @@
                     this.limparMensagens()
 
                     $.ajax({
-                        type: "POST", // Método da requisição
-                        url: `${this.BASE_URL}api/admin-servicos/cadastrar`, // URL do servidor
-                        data: servico, // Dados no formato JSON
+                        type: "POST",
+                        url: `${this.BASE_URL}api/admin-servicos/cadastrar`,
+                        data: servico,
                         dataType: 'json',
                         success: function (response) {
-                            // Função a ser executada em caso de sucesso
-                            alert("Funcionário cadastrado com sucesso")
+                            this.adminServicos = response.adminServicos
                         },
                         error: (error) => {
                             this.errors.adminServico = error.responseJSON.errors
-
-                            console.log(this.errors);
                         }
                     });
                 },
@@ -281,6 +275,7 @@
                         success: (data) => {
                             this.admin = data.admin
                             this.categorias = data.listas.categorias
+                            this.adminServicos = data.listas.adminServicos
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro

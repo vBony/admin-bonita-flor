@@ -33,7 +33,7 @@ class modelHelper{
         return $ipaddress;
     }
 
-    public function setColunas($sufixo, $atributos){
+    public static function setColunas($sufixo, $atributos){
         $retorno = array();
         foreach($atributos as $atributo){
             $str = "$sufixo.$atributo"." as ".$sufixo."_".$atributo;

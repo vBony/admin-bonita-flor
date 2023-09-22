@@ -52,6 +52,6 @@ class Categoria extends modelHelper{
     }
 
     public static function getColunas(){
-        parent::setColunas(self::$sufix, self::$attrs);
+        return parent::setColunas(self::$sufix, self::$attrs);
     }
 }

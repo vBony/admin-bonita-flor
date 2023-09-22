@@ -52,7 +52,7 @@ class AdminServico  {
         }
 
         if(empty($this->messages)){
-            if(!empty($model->buscarPorServicoEAdmin($idServico, $idAdmin))){
+            if(!empty($model->buscarPorServico($idAdmin, $idServico))){
                 $this->messages['servico'] = 'Serviço já adicionado';
             }
         }

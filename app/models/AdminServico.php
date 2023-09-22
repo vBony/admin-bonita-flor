@@ -49,29 +49,6 @@ class AdminServico extends modelHelper{
         }
     }
 
-    public function buscarPorServicoEAdmin($idServico, $idAdmin){
-        $sql  = "SELECT 
-                    tb.*
-                FROM adminServico tb
-                INNER JOIN servico s on s.id = tb.idServico
-                    AND s.excluido = 0
-                INNER JOIN categoria c ON s.idCategoria = c.id
-                    AND c.excluido = 0
-                WHERE tb.idAdmin = :idAdmin
-                AND tb.idServico = :idServico
-                AND tb.excluido = 0";
-
-        $sql = $this->db->prepare($sql);
-        $sql->bindValue(':idServico', $idServico);
-        $sql->bindValue(':idAdmin', $idAdmin);
-
-
-        if($sql->rowCount() > 0){
-            $data = $sql->fetch(PDO::FETCH_ASSOC);
-            return $data;
-        }
-    }
-
     public function buscarPorAdmin($idAdmin){
         $sufix = self::$sufix;
         $colunas = self::getColunas();
@@ -104,6 +81,43 @@ class AdminServico extends modelHelper{
             $data = $sql->fetchAll(PDO::FETCH_NAMED);
 
             return $this->setMapeamentoLista($data);
+        }
+    }
+
+    public function buscarPorServico($idAdmin, $idServico){
+        $sufix = self::$sufix;
+        $colunas = self::getColunas();
+
+        $sufixServico = Servico::$sufix;
+        $colunasServico = Servico::getColunas();
+
+        $colunasCategoria = Categoria::getColunas();
+        $sufixCategoria = Categoria::$sufix;
+
+        $sql  = "SELECT 
+                    {$colunas},
+                    {$colunasServico},
+                    {$colunasCategoria}
+                FROM adminServico {$sufix}
+                INNER JOIN servico {$sufixServico} on {$sufixServico}.id = {$sufix}.idServico
+                    AND {$sufixServico}.excluido = 0
+                INNER JOIN categoria {$sufixCategoria} ON {$sufixServico}.idCategoria = {$sufixCategoria}.id
+                    AND {$sufixCategoria}.excluido = 0
+                WHERE {$sufix}.idAdmin = :idAdmin
+                AND {$sufix}.excluido = 0
+                AND {$sufix}.idServico = :idServico";
+
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':idAdmin', $idAdmin);
+        $sql->bindValue(':idServico', $idServico);
+        $sql->execute();
+
+
+        if($sql->rowCount() > 0){
+
+            $data = $sql->fetch(PDO::FETCH_NAMED);
+
+            return $this->setMapeamento($data);
         }
     }
 
