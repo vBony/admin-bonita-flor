@@ -32,5 +32,31 @@ class modelHelper{
             $ipaddress = 'UNKNOWN';
         return $ipaddress;
     }
+
+    public function setColunas($sufixo, $atributos){
+        $retorno = array();
+        foreach($atributos as $atributo){
+            $str = "$sufixo.$atributo"." as ".$sufixo."_".$atributo;
+            array_push($retorno, $str);
+        }
+
+        return implode(",", $retorno);
+    }
+
+    public function mapear($dados){
+
+    }
+
+    public function mapearAgregado($chave, $dados){
+
+    }
+
+    public function mapearLista($dados){
+
+    }
+
+    public function mapearListaAgregado($chave, $dados){
+
+    }
 }
 ?>

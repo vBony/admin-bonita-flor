@@ -7,10 +7,24 @@ use \PDOException;
 
 class Servico extends modelHelper{
 
-    private $table = 'servico';
+    public $table = 'servico';
+    public static $sufix = 'svc';
+
+    public $attrs = [
+        'id',
+        'idCategoria',
+        'descricao',
+        'nome',
+        'preco',
+        'duracao',
+        'excluido'
+    ];
+
+    public $colunas;
 
     public function __construct()
     {
+        $this->colunas = $this->setColunas(self::$sufix, $this->attrs);
         parent::__construct();
     }
 

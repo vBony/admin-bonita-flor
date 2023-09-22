@@ -1,5 +1,6 @@
 <?php
 use core\controllerHelper;
+use models\AdminServico;
 use models\validators\AdminServico as Validator;
 
 class adminServicoController extends controllerHelper{
@@ -15,6 +16,14 @@ class adminServicoController extends controllerHelper{
         $admin = $this->isLogged();
 
         $validator = new Validator();
+        $AdminServico = new AdminServico();
+
+        $servicos = $AdminServico->buscarPorAdmin($admin['id']);
+        echo '<pre>'; 
+        print_r($servicos);
+        echo '<br> '.__CLASS__.'| Linha: '.__LINE__. '<br>';
+        echo '<pre>'; 
+        exit;
 
         $data = $this->post();
         $data['idAdmin'] = $admin['id'];
@@ -24,7 +33,10 @@ class adminServicoController extends controllerHelper{
             $message['errors'] = $validator->getMessages();
             $this->send('400', $message);
         }else{
-            // inserir
+            if($AdminServico->salvar($data) === true){
+                $servicos = $AdminServico->buscarServicosPorAdmin($admin['id']);
+                $this->send('400', ['adminServicos' => $servicos]);
+            }
         }
     }
 }

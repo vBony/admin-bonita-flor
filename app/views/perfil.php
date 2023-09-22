@@ -116,7 +116,7 @@
                             <p class="text-muted">Selecione os serviços que você pode atender.</p>
                             <form>
                                 <div class="form-row align-items-center">
-                                    <div class="col-lg-5 col-md-12 mb-3">
+                                    <div class="col-lg-5 col-md-12 mt-3">
                                         <label for="categoriaCadastro">Categoria</label>
                                         <select 
                                             class="form-control" 
@@ -129,9 +129,9 @@
                                             <option selected>Selecione</option>
                                             <option :value="reg.id" v-for="(reg, index) in categorias">{{reg.descricao}}</option>
                                         </select>
-                                        <div v-if="errors.adminServico.categoria" class="invalid-feedback">{{errors.adminServico.categoria}}</div>
+                                        <div v-if="errors.adminServico.categoria" class="invalid-tooltip">{{errors.adminServico.categoria}}</div>
                                     </div>
-                                    <div class="col-lg-5 col-md-12 mb-3">
+                                    <div class="col-lg-5 col-md-12 mt-3">
                                         <label for="categoriaCadastro">Serviço</label>
                                         <select 
                                             class="form-control" 
@@ -144,9 +144,9 @@
                                             <option selected>Selecione</option>
                                             <option :value="reg.id" v-for="(reg, index) in servicos">{{reg.nome}}</option>
                                         </select>
-                                        <div v-if="errors.adminServico.servico" class="invalid-feedback">{{errors.adminServico.servico}}</div>
+                                        <div v-if="errors.adminServico.servico" class="invalid-tooltip">{{errors.adminServico.servico}}</div>
                                     </div>
-                                    <div class="col-lg-2 col-md-12 mb-3">
+                                    <div class="col-lg-2 col-md-12 mt-3">
                                         <label for="categoriaCadastro">&nbsp;</label>
                                         <input type="submit" @click.prevent="inserirServico()" class="btn btn-success form-control" value="Adicionar">
                                     </div>

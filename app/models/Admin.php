@@ -9,7 +9,7 @@ use \PDOException;
 
 class Admin extends modelHelper{
 
-    private $table = 'admin';
+    public $table = 'admin';
 
     public function __construct()
     {

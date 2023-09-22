@@ -9,20 +9,31 @@ use \PDOException;
 
 class Categoria extends modelHelper{
 
-    private $table = 'categoria';
+    public $table = 'categoria';
+    public static $sufix = 'cat';
+
+    public $colunas;
+    public $attrs = [
+        'id',
+        'descricao',
+        'excluido'
+    ];
 
     public function __construct()
     {
+
+        $this->colunas = $this->setColunas(self::$sufix, $this->attrs);
         parent::__construct();
     }
 
     public function buscar($id = null){
         $sql  = "SELECT 
                     *
-                FROM {$this->table} ";
+                FROM {$this->table} 
+                WHERE excluido = 0 ";
         
         if(!empty($id)){
-            $sql .= "WHERE id = :id";
+            $sql .= "AND id = :id";
         }
 
         $sql = $this->db->prepare($sql);
