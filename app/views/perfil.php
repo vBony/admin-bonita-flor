@@ -126,7 +126,7 @@
                                             :class="{ 'is-invalid': errors.adminServico.categoria }"
                                             
                                         >
-                                            <option selected>Selecione</option>
+                                            <option selected :value="null">Selecione</option>
                                             <option :value="reg.id" v-for="(reg, index) in categorias">{{reg.descricao}}</option>
                                         </select>
                                         <div v-if="errors.adminServico.categoria" class="invalid-tooltip">{{errors.adminServico.categoria}}</div>
@@ -159,12 +159,14 @@
                                     <thead id="theadAdmins" class="bg-white">
                                         <tr id="trTransacoes">
                                             <th scope="col">Nome</th>
+                                            <th scope="col">Cat.</th>
                                             <th scope="col" class="text-center"></th>
                                         </tr>
                                     </thead>
                                     <tbody id="servicos-area">
                                         <tr v-for="(reg, index) in adminServicos" :key="index">
                                             <td class="align-middle">{{reg.servico.nome}}</td>
+                                            <td class="align-middle">{{reg.servico.categoria.descricao}}</td>
                                             <td class="text-center">
                                                 <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
                                             </td>
