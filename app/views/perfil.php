@@ -389,7 +389,8 @@
                         processData: false,
                         contentType: false,
                         success: function(response) {
-                            console.log("Resposta do servidor:", response);
+                            alert('Dados alterados com sucesso!')
+                            location.reload();
                         },
                         error: function(xhr, status, error) {
                             console.error("Erro na requisição:", error);

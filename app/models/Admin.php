@@ -3,10 +3,15 @@ namespace models;
 
 use core\controllerHelper;
 use core\modelHelper;
-
+use helpers\UploadFile;
 use \PDO;
 use \PDOException;
+use core\sanitazerHelper as Sanitazer;
 
+/**
+ * TODO
+ * - Adicionar o telefone insert e update
+ */
 class Admin extends modelHelper{
 
     public $table = 'admin';
@@ -74,10 +79,20 @@ class Admin extends modelHelper{
         }
     }
 
-    public function buscarPorEmail($email){
-        $sql = "SELECT {$this->camposSeguros} FROM {$this->table} WHERE email = :email";
-        $sql = $this->db->prepare($sql);
+    public function buscarPorEmail($email, $excecaoAdmin = null){
+        $sql  = "SELECT {$this->camposSeguros} FROM {$this->table} WHERE email = :email ";
+
+        if(!empty($excecaoAdmin)){
+            $sql .= "AND id != :id ";
+        }
+
+        $sql  = $this->db->prepare($sql);
         $sql->bindValue(':email', strtolower($email));
+
+        if(!empty($excecaoAdmin)){
+            $sql->bindValue(':id', strtolower($excecaoAdmin));
+        }
+
         $sql->execute();
 
         if($sql->rowCount() > 0){
@@ -102,8 +117,8 @@ class Admin extends modelHelper{
         VALUES(:nome, :email, :senha);";
 
         $sql = $this->db->prepare($sql);
-        $sql->bindValue(':nome', ucwords(strtolower($data['nome'])));
-        $sql->bindValue(':email', str_replace(' ', '', strtolower($data['email'])));
+        $sql->bindValue(':nome', Sanitazer::nomeCompleto($data['nome']));
+        $sql->bindValue(':email',  Sanitazer::email($data['email']));
         $sql->bindValue(':senha', password_hash($data['senha'], PASSWORD_BCRYPT));
 
         try {
@@ -113,6 +128,36 @@ class Admin extends modelHelper{
             $this->db->commit();
 
             return $id;
+        } catch(PDOException $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
+
+    public function alterar($idAdmin, $data){
+        $sql = "UPDATE
+                    {$this->table}
+                SET
+                    nome = :nome,
+                    descricao = :descricao,
+                    email = :email,
+                    senha = :senha
+                WHERE
+                    id = :idAdmin";
+
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':idAdmin', $idAdmin);
+        $sql->bindValue(':nome', Sanitazer::nomeCompleto($data['nome']));
+        $sql->bindValue(':email', Sanitazer::email($data['email']));
+        $sql->bindValue(':descricao', Sanitazer::texto($data['descricao']));
+        $sql->bindValue(':senha', password_hash($data['senha'], PASSWORD_BCRYPT));
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $this->db->commit();
+
+            return true;
         } catch(PDOException $e) {
             $this->db->rollback();
             return false;
@@ -145,6 +190,50 @@ class Admin extends modelHelper{
         else
             $ipaddress = 'UNKNOWN';
         return $ipaddress;
+    }
+
+    public function salvarFotoPerfil($idAdmin, $foto){
+        $upload = new UploadFile($foto);
+
+        if(empty($foto)){
+            return true;
+        }
+
+        $diretorio = $this->diretorioBase().self::$CAMINHO_FOTO_PADRAO;
+
+        $extensao = $upload->getExtension();
+        $nomeArquivo = "$idAdmin.$extensao";
+
+        if($upload->upload($diretorio, $nomeArquivo)){
+            return $this->alterarFotoPerfil($idAdmin, $nomeArquivo);
+        }
+    }
+
+    public function alterarFotoPerfil($idAdmin, $nomeArquivo){
+        $sql = "UPDATE
+                    {$this->table}
+                SET
+                    foto = :foto
+                WHERE
+                    id = :idAdmin";
+
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':idAdmin', $idAdmin);
+        $sql->bindValue(':foto', $nomeArquivo);
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $this->db->commit();
+
+            return true;
+        } catch(PDOException $e) {
+            $this->db->rollback();
+
+            echo var_dump($e->getMessage()); exit;
+
+            return false;
+        }
     }
 
     public function signin($email, $password){

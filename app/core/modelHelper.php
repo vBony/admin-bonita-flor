@@ -8,6 +8,14 @@ class modelHelper{
         $this->db = Database::getInstance();
     }   
 
+    public function diretorioBase(){
+        return dirname(__FILE__, 3) . '/';
+    }
+
+    public function xss($str){
+        return htmlentities($str);
+    }
+
     public static function createdAt(){
         return date('Y-m-d H:i:s');
     }

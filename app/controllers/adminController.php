@@ -3,6 +3,7 @@ use core\controllerHelper;
 use models\validators\Admin as AdminValidator;
 use models\Admin;
 use auth\Admin as AdminAuth;
+use helpers\UploadFile;
 use models\AdminServico;
 use models\Categoria;
 class adminController extends controllerHelper{
@@ -84,11 +85,30 @@ class adminController extends controllerHelper{
     }
 
     public function apiAlterar(){
-        echo '<pre>'; 
-        print_r($this->post());
-        print_r($_FILES);
-        echo '<br> '.__CLASS__.'| Linha: '.__LINE__. '<br>';
-        echo '<pre>'; 
-        exit;
+        $admin = $this->isLogged();
+
+        $data = $this->post('admin');
+        $data['id'] = $admin['id'];
+
+        $fotoPerfil = isset($_FILES['foto']) ? $_FILES['foto'] : null;
+
+        
+        $validator = new AdminValidator(AdminValidator::$ALTERANDO);
+        $validator->validate($data);
+        $validator->validarFotoPerfil($fotoPerfil);
+
+        if(empty($validator->getMessages())){
+            $model = new Admin();
+            $sucessoFoto  = $model->salvarFotoPerfil($data['id'], $fotoPerfil);
+            $sucessoAdmin = $model->alterar($data['id'], $data);
+
+            if($sucessoFoto && $sucessoAdmin){
+                $this->send(200);
+            }else{
+                $this->send(401);
+            }
+        }else{
+            $this->send(400, ['admin' => $validator->getMessages()]);
+        }
     }
 }
