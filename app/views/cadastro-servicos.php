@@ -19,7 +19,7 @@
 
     <!-- Custom styles for this template-->
     <link href="<?=BASE_URL?>app/assets/css/cadastro-servicos.css" rel="stylesheet">
-    <link href="<?=BASE_URL?>app/assets/css/cadastro-servicos-2.css" rel="stylesheet">
+    <link href="<?=BASE_URL?>app/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 </head>
@@ -32,50 +32,149 @@
             <h1 class="h3 mb-0 text-gray-800">Suas informações</h1>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                 <div class="card shadow mb-4">
-                    <div class="card-body row">
-                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                            <h4 class="text-primary">Cadastro de categoria e serviços</h4>
-
-                            <p class="text-muted">Selecione os serviços que você pode atender.</p>
-                            <form>
-                                <div class="form-row align-items-center">
-                                    <div class="col-lg-5 col-md-12 mb-3">
-                                        <label for="categoriaCadastro">Categoria</label>
-                                        <form class="form-inline">
-                                            <input type="password" class="form-control" id="inputPassword2">
-                                        </form>
-                                        <div v-if="errors.adminServico.categoria" class="invalid-feedback">{{errors.adminServico.categoria}}</div>
-                                    </div>
-                                    <div class="col-lg-2 col-md-12 mb-3">
-                                        <label for="categoriaCadastro">&nbsp;</label>
-                                        <input type="submit" @click.prevent="inserirServico()" class="btn btn-success form-control" value="Adicionar">
-                                    </div>
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Cadastro de categoria e serviços</h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Selecione os serviços que você pode atender.</p>
+                        <form>
+                            <div class="form-row align-items-center">
+                                <div class="col-lg-10 col-md-12 mb-3">
+                                    <label for="categoriaCadastro">Categoria</label>
+                                    <form class="form-inline">
+                                        <input type="text" class="form-control" id="inputPassword2">
+                                    </form>
+                                    <div v-if="errors.adminServico.categoria" class="invalid-feedback">{{errors.adminServico.categoria}}</div>
                                 </div>
-                            </form>
-                            <hr>
-                            <h4 class="text-secondary">Seviços</h4>
-                            <div id="table-dad" @scroll="scrollHandleFuncionarios($event)">
-                                <table class="table" id="table-list">
-                                    <thead id="theadAdmins" class="bg-white">
-                                        <tr id="trTransacoes">
-                                            <th scope="col">Nome</th>
-                                            <th scope="col" class="text-center"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="servicos-area">
-                                        <tr v-for="(reg, index) in adminServicos" :key="index">
-                                            <td class="align-middle">{{reg.nome}}</td>
-                                            <td class="text-center">
-                                                <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="col-lg-2 col-md-12 mb-3">
+                                    <label for="categoriaCadastro">&nbsp;</label>
+                                    <input type="submit" @click.prevent="inserirServico()" class="btn btn-success form-control" value="Adicionar">
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class="col-12 flex-row d-flex justify-content-between align-items-center mb-2">
+                            <h4 class="text-secondary align-middle m-0">Seviços</h4>
+                            <button type="button" data-toggle="modal" data-target="#modalCadastroServico" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Novo</button>
+                        </div>
+                       
+                        <div id="table-dad" @scroll="scrollHandleFuncionarios($event)">
+                            <table class="table" id="table-list">
+                                <thead id="theadAdmins" class="bg-white">
+                                    <tr id="trTransacoes">
+                                        <th scope="col">Nome</th>
+                                        <th scope="col" class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="servicos-area">
+                                    <tr v-for="(reg, index) in adminServicos" :key="index">
+                                        <td class="align-middle">{{reg.nome}}</td>
+                                        <td class="text-center">
+                                            <i class="fas fa-pen mr-2 text-warning"></i>
+                                            <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Categorias ativas</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="table-dad">
+                            <table class="table" id="table-list">
+                                <tbody id="servicos-area">
+                                    <tr v-for="(reg, index) in adminServicos" :key="index">
+                                        <td class="align-middle">{{reg.nome}}</td>
+                                        <td class="text-center">
+                                            <i class="fas fa-pen mr-2 text-warning"></i>
+                                            <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalCadastroServico" tabindex="-1" role="dialog" aria-labelledby="modalCadastroServico" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Criar Serviço</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Nome</label>
+                                <input 
+                                    v-model="Admin.nome" 
+                                    type="name" 
+                                    class="form-control" 
+                                    id="nome"
+                                    :class="{ 'is-invalid': errors.nome }"
+                                    @input="errors.nome = null"
+                                >
+                                <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Preço</label>
+                                <input 
+                                    v-model="Admin.nome" 
+                                    type="name" 
+                                    class="form-control" 
+                                    id="nome"
+                                    :class="{ 'is-invalid': errors.nome }"
+                                    @input="errors.nome = null"
+                                >
+                                <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Hora</label>
+                                <input 
+                                    v-model="Admin.nome" 
+                                    type="name" 
+                                    class="form-control" 
+                                    id="nome"
+                                    :class="{ 'is-invalid': errors.nome }"
+                                    @input="errors.nome = null"
+                                >
+                                <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Descrição</label>
+                                <textarea class="form-control" aria-label="With textarea"></textarea>
+                                <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary">Salvar</button>
                 </div>
             </div>
         </div>
@@ -141,6 +240,20 @@
                     categorias: [],
 
                     adminServicos: [
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"},
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"},
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"},
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"},
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"},
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"},
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"},
                         {id: 23, nome: "Unha de gel"},
                         {id: 23, nome: "Alongamento de unha"}
                     ],
