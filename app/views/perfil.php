@@ -39,12 +39,15 @@
                             <h4 class="text-primary">Informações Pessoais</h4>
 
                             <form>
-                                <div class="col-12 my-4 d-flex align-items-center">
+                                <div class="col-12 px-0 my-4 d-flex align-items-center">
                                     <img :src="admin.foto" class="profile-photo" alt="">
                                     <div class="d-flex flex-column ml-4">
                                         <div class="font-weight-bold">{{admin.nome}}</div>
-                                        <a href="">Alterar foto de perfil</a>
+                                        <a href="#" @click="triggerFotoPerfil()">Alterar foto de perfil</a>
+                                        <span class="text-danger" v-if="errors.foto">{{errors.foto}}</span>
                                     </div>
+
+                                    <input type="file" @change="previewImage" id="fotoPerfil" class="d-none" accept="image/jpg, image/png, image/jpeg">
                                 </div>
     
                                 <div class="form-group">
@@ -91,7 +94,7 @@
                                 </div>
     
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Senha</label>
+                                    <label for="exampleInputEmail1">Alterar Senha</label>
                                     <input 
                                         v-model="admin.senha" 
                                         type="password" 
@@ -207,6 +210,8 @@
         const app = {
             data() {
                 return {
+                    backupFoto: null,
+
                     admin: {
                         id: null,
                         nome: null,
@@ -262,6 +267,9 @@
                         dataType: 'json',
                         success: (response) => {
                             this.adminServicos = response.adminServicos
+
+                            this.servico.idCategoria = null 
+                            this.servico.idServico = null 
                         },
                         error: (error) => {
                             this.errors.adminServico = error.responseJSON.errors
@@ -278,6 +286,8 @@
                             this.admin = data.admin
                             this.categorias = data.listas.categorias
                             this.adminServicos = data.listas.adminServicos
+
+                            this.backupFoto = this.admin.foto
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
@@ -319,6 +329,48 @@
                                 this.adminServicos.push(obj);
                             }
                         });
+                    }
+                },
+
+                triggerFotoPerfil(){
+                    $('#fotoPerfil').trigger('click')
+                },
+
+                previewImage(){
+                    this.errors.foto = null;
+
+                    // Mantendo a foto anterior caso dê algum erro
+                    const bckpFoto = this.admin.foto
+                    
+                    const file = event.target.files[0];
+                    if (file) {
+                        const extensoesPermitidas = ["jpg", "jpeg", "png"];
+                        const tamanhoMaximo = 5 * 1024 * 1024; // 5MB
+
+                         // Verificando a extensão do arquivo
+                        const extensao = file.name.split(".").pop().toLowerCase();
+                        if (!extensoesPermitidas.includes(extensao)) {
+                            this.errors.foto = "Apenas arquivos de imagem (jpg, jpeg e png) são permitidos.";
+                            this.admin.foto = this.backupFoto;
+                            return;
+                        }
+
+                        // Verificando o tamanho do arquivo
+                        if (file.size > tamanhoMaximo) {
+                            this.errors.foto = "O tamanho do arquivo excede o limite de 5MB.";
+                            this.admin.foto = this.backupFoto;
+                            return;
+                        }
+
+                        const reader = new FileReader();
+
+                        reader.onload = (e) => {
+                            this.admin.foto = e.target.result;
+                        };
+
+                        reader.readAsDataURL(file);
+                    } else {
+                        this.admin.foto = bckpFoto;
                     }
                 },
 
