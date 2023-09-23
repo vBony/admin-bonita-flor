@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Serviços</title>
 
     <!-- Custom fonts for this template-->
     <link href="<?=BASE_URL?>app/assets/libs/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -18,8 +18,8 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="<?=BASE_URL?>app/assets/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="<?=BASE_URL?>app/assets/css/cadastro-admin.css" rel="stylesheet">
+    <link href="<?=BASE_URL?>app/assets/css/cadastro-servicos.css" rel="stylesheet">
+    <link href="<?=BASE_URL?>app/assets/css/cadastro-servicos-2.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 </head>
@@ -29,15 +29,54 @@
     <div class="container-fluid" id="app">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Cadastro de Serviços</h1>
+            <h1 class="h3 mb-0 text-gray-800">Suas informações</h1>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                
-            </div>
-    
-            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <div class="card-body row">
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <h4 class="text-primary">Cadastro de categoria e serviços</h4>
+
+                            <p class="text-muted">Selecione os serviços que você pode atender.</p>
+                            <form>
+                                <div class="form-row align-items-center">
+                                    <div class="col-lg-5 col-md-12 mb-3">
+                                        <label for="categoriaCadastro">Categoria</label>
+                                        <form class="form-inline">
+                                            <input type="password" class="form-control" id="inputPassword2">
+                                        </form>
+                                        <div v-if="errors.adminServico.categoria" class="invalid-feedback">{{errors.adminServico.categoria}}</div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-12 mb-3">
+                                        <label for="categoriaCadastro">&nbsp;</label>
+                                        <input type="submit" @click.prevent="inserirServico()" class="btn btn-success form-control" value="Adicionar">
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                            <h4 class="text-secondary">Seviços</h4>
+                            <div id="table-dad" @scroll="scrollHandleFuncionarios($event)">
+                                <table class="table" id="table-list">
+                                    <thead id="theadAdmins" class="bg-white">
+                                        <tr id="trTransacoes">
+                                            <th scope="col">Nome</th>
+                                            <th scope="col" class="text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="servicos-area">
+                                        <tr v-for="(reg, index) in adminServicos" :key="index">
+                                            <td class="align-middle">{{reg.nome}}</td>
+                                            <td class="text-center">
+                                                <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -68,60 +107,102 @@
         const app = {
             data() {
                 return {
-                    categoria: {
-                        id: '',
-                        nome: '',
-                        descricao: '',
+                    admin: {
+                        id: null,
+                        nome: null,
+                        foto: null,
+                        descricao: null,
+                        telefone: null,
+                        email: null,
+                        senha: null,
+                        dataCriacao: null
+                    },
+
+                    errors: {
+                        nome: null,
+                        foto: null,
+                        descricao: null,
+                        telefone: null,
+                        email: null,
+                        senha: null,
+                        adminServico: {
+                            servico: null,
+                            categoria: null
+                        }
                     },
 
                     servico: {
-                        id: null,
-                        preco: null,
-                        descricao: null
+                        idCategoria: null,
+                        idServico: null
                     },
 
                     servicos: [],
+
+                    categorias: [],
+
+                    adminServicos: [
+                        {id: 23, nome: "Unha de gel"},
+                        {id: 23, nome: "Alongamento de unha"}
+                    ],
                     
                     BASE_URL: $('#burl').val()
                 }
             },
             mounted() {
-                this.buscarAdmins()
-                console.log(this.admins);
+                this.buscarDados()
             },
 
             methods: {
-                submit(){
-                    let admin = this.Admin
+                inserirServico(){
+                    let servico = this.servico
 
                     this.limparMensagens()
 
                     $.ajax({
                         type: "POST", // Método da requisição
-                        url: `${this.BASE_URL}api/funcionario/cadastrar`, // URL do servidor
-                        data: admin, // Dados no formato JSON
+                        url: `${this.BASE_URL}api/admin-servicos/cadastrar`, // URL do servidor
+                        data: servico, // Dados no formato JSON
                         dataType: 'json',
                         success: function (response) {
                             // Função a ser executada em caso de sucesso
                             alert("Funcionário cadastrado com sucesso")
                         },
                         error: (error) => {
-                            this.errors = error.responseJSON.errors
+                            this.errors.adminServico = error.responseJSON.errors
+
+                            console.log(this.errors);
                         }
                     });
                 },
 
-                buscarAdmins(){
+                buscarDados(){
                     $.ajax({
                         type: "GET", // Método da requisição (GET)
-                        url: `${this.BASE_URL}api/funcionario/listar`, // URL da API ou recurso
+                        url: `${this.BASE_URL}api/funcionario/buscar`, // URL da API ou recurso
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
                         success: (data) => {
-                            this.admins = data.admins
+                            this.admin = data.admin
+                            this.categorias = data.listas.categorias
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
                             console.error("Erro na requisição GET:", error);
+                        }
+                    });
+                },
+
+                buscarServico(){
+                    $.ajax({
+                        type: "post", // Método da requisição (GET)
+                        url: `${this.BASE_URL}api/servicos/buscar-por-categoria`, // URL da API ou recurso
+                        dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
+                        data: {idCategoria: this.servico.idCategoria},
+                        success: (data) => {
+                            this.servicos = data.servicos
+                        },
+                        error: (data) => {
+                            // Função a ser executada em caso de erro
+                            console.error("Erro na requisição GET:", data);
                         }
                     });
                 },
@@ -142,9 +223,9 @@
                 },
 
                 limparCampos(){
-                    this.Admin.nome = null
-                    this.Admin.email = null
-                    this.Admin.senha = null
+                    this.admin.nome = null
+                    this.admin.email = null
+                    this.admin.senha = null
                 }
             }
         }

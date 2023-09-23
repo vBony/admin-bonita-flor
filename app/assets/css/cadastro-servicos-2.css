@@ -1,0 +1,13 @@
+.profile-photo{
+    height: 45px !important;
+    width: 45px !important;
+
+    object-fit: cover !important;
+
+    border-radius: 100% !important;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: -10px;
+}
