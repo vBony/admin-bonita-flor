@@ -108,7 +108,8 @@ class adminController extends controllerHelper{
                 $this->send(401);
             }
         }else{
-            $this->send(400, ['admin' => $validator->getMessages()]);
+            $response['errors']['admin'] = $validator->getMessages();
+            $this->send(400, $response);
         }
     }
 }

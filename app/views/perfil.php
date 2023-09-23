@@ -44,7 +44,7 @@
                                     <div class="d-flex flex-column ml-4">
                                         <div class="font-weight-bold">{{admin.nome}}</div>
                                         <a href="#" @click="triggerFotoPerfil()">Alterar foto de perfil</a>
-                                        <span class="text-danger" v-if="errors.foto">{{errors.foto}}</span>
+                                        <span class="text-danger" v-if="errors.admin.foto">{{errors.admin.foto}}</span>
                                     </div>
 
                                     <input type="file" @change="previewImage" id="fotoPerfil" class="d-none" accept="image/jpg, image/png, image/jpeg">
@@ -58,10 +58,10 @@
                                         class="form-control" 
                                         id="nome" 
                                         placeholder="Ex: Maria dos Santos Ferreira"
-                                        :class="{ 'is-invalid': errors.nome }"
-                                        @input="errors.nome = null"
+                                        :class="{ 'is-invalid': errors.admin.nome }"
+                                        @input="errors.admin.nome = null"
                                     >
-                                    <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
+                                    <div v-if="errors.admin.nome" class="invalid-feedback">{{errors.admin.nome}}</div>
                                 </div>
     
                                 <div class="form-group">
@@ -72,10 +72,10 @@
                                         class="form-control" 
                                         id="email" 
                                         placeholder="Ex: maria@hotmail.com"
-                                        :class="{ 'is-invalid': errors.email }"
-                                        @input="errors.email = null"
+                                        :class="{ 'is-invalid': errors.admin.email }"
+                                        @input="errors.admin.email = null"
                                     >
-                                    <div v-if="errors.email" class="invalid-feedback">{{errors.email}}</div>
+                                    <div v-if="errors.admin.email" class="invalid-feedback">{{errors.admin.email}}</div>
                                 </div>
                             
                                 <div class="form-group">
@@ -85,12 +85,12 @@
                                         class="form-control" 
                                         id="descricao" 
                                         rows="5"
-                                        :class="{ 'is-invalid': errors.descricao }"
-                                        @input="errors.descricao = null"
+                                        :class="{ 'is-invalid': errors.admin.descricao }"
+                                        @input="errors.admin.descricao = null"
                                         placeholder="Um breve texto sobre sua carreira e experiências profissionais"
                                     >
                                     </textarea>
-                                    <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                    <div v-if="errors.admin.descricao" class="invalid-feedback">{{errors.admin.descricao}}</div>
                                 </div>
     
                                 <div class="form-group">
@@ -101,10 +101,10 @@
                                         class="form-control" 
                                         id="alterarSenha" 
                                         autocomplete="one-time-code"
-                                        :class="{ 'is-invalid': errors.senha }"
-                                        @input="errors.senha = null"
+                                        :class="{ 'is-invalid': errors.admin.senha }"
+                                        @input="errors.admin.senha = null"
                                     >
-                                    <div v-if="errors.senha" class="invalid-feedback">{{errors.senha}}</div>
+                                    <div v-if="errors.admin.senha" class="invalid-feedback">{{errors.admin.senha}}</div>
                                 </div>
     
                                 <div class="form-group my-4">
@@ -225,12 +225,14 @@
                     },
 
                     errors: {
-                        nome: null,
-                        foto: null,
-                        descricao: null,
-                        telefone: null,
-                        email: null,
-                        senha: null,
+                        admin: {
+                            nome: null,
+                            foto: null,
+                            descricao: null,
+                            telefone: null,
+                            email: null,
+                            senha: null,
+                        },
                         adminServico: {
                             servico: null,
                             categoria: null
@@ -339,7 +341,7 @@
                 },
 
                 previewImage(){
-                    this.errors.foto = null;
+                    this.errors.admin.foto = null;
 
                     // Mantendo a foto anterior caso dê algum erro
                     const bckpFoto = this.admin.foto
@@ -352,14 +354,14 @@
                          // Verificando a extensão do arquivo
                         const extensao = file.name.split(".").pop().toLowerCase();
                         if (!extensoesPermitidas.includes(extensao)) {
-                            this.errors.foto = "Apenas arquivos de imagem (jpg, jpeg e png) são permitidos.";
+                            this.errors.admin.foto = "Apenas arquivos de imagem (jpg, jpeg e png) são permitidos.";
                             this.previewProfilePic = this.backupFoto;
                             return;
                         }
 
                         // Verificando o tamanho do arquivo
                         if (file.size > tamanhoMaximo) {
-                            this.errors.foto = "O tamanho do arquivo excede o limite de 5MB.";
+                            this.errors.admin.foto = "O tamanho do arquivo excede o limite de 5MB.";
                             this.previewProfilePic = this.backupFoto;
                             return;
                         }
@@ -388,12 +390,15 @@
                         data: form,
                         processData: false,
                         contentType: false,
-                        success: function(response) {
+                        success: (response) => {
                             alert('Dados alterados com sucesso!')
                             location.reload();
                         },
-                        error: function(xhr, status, error) {
-                            console.error("Erro na requisição:", error);
+                        error: (error) => {
+                            let errorsObj = JSON.parse(error.responseText)
+                            this.errors.admin = errorsObj.errors.admin
+
+                            console.log(this.errors.admin);
                         }
                     });
                 },
