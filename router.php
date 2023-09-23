@@ -11,6 +11,8 @@ $routes['/api/funcionario/listar'] = '/admin/apiListar';
 $routes['/api/funcionario/buscar'] = '/admin/apiBuscar';
 $routes['/api/funcionario/login'] = '/admin/apiLogin';
 $routes['/perfil'] = '/admin/viewAlterarAdmin';
+$routes['/api/admin/alterar'] = '/admin/apiAlterar';
+
 
 // Serviços/Categorias
 $routes['/servicos/cadastrar'] = '/servicos/viewCadastrar';

@@ -82,4 +82,13 @@ class adminController extends controllerHelper{
             ]
         ]);
     }
+
+    public function apiAlterar(){
+        echo '<pre>'; 
+        print_r($this->post());
+        print_r($_FILES);
+        echo '<br> '.__CLASS__.'| Linha: '.__LINE__. '<br>';
+        echo '<pre>'; 
+        exit;
+    }
 }

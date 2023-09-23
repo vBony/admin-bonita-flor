@@ -40,7 +40,7 @@
 
                             <form>
                                 <div class="col-12 px-0 my-4 d-flex align-items-center">
-                                    <img :src="admin.foto" class="profile-photo" alt="">
+                                    <img :src="previewProfilePic" class="profile-photo" alt="">
                                     <div class="d-flex flex-column ml-4">
                                         <div class="font-weight-bold">{{admin.nome}}</div>
                                         <a href="#" @click="triggerFotoPerfil()">Alterar foto de perfil</a>
@@ -108,7 +108,7 @@
                                 </div>
     
                                 <div class="form-group my-4">
-                                    <input type="submit" class="btn btn-success form-control" value="Alterar">
+                                    <input type="submit" class="btn btn-success form-control" @click.prevent="alterarAdmin()" value="Alterar">
                                 </div>
                             </form>
                         </div>
@@ -211,6 +211,7 @@
             data() {
                 return {
                     backupFoto: null,
+                    previewProfilePic: null,
 
                     admin: {
                         id: null,
@@ -288,6 +289,7 @@
                             this.adminServicos = data.listas.adminServicos
 
                             this.backupFoto = this.admin.foto
+                            this.previewProfilePic = this.admin.foto
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
@@ -351,27 +353,48 @@
                         const extensao = file.name.split(".").pop().toLowerCase();
                         if (!extensoesPermitidas.includes(extensao)) {
                             this.errors.foto = "Apenas arquivos de imagem (jpg, jpeg e png) são permitidos.";
-                            this.admin.foto = this.backupFoto;
+                            this.previewProfilePic = this.backupFoto;
                             return;
                         }
 
                         // Verificando o tamanho do arquivo
                         if (file.size > tamanhoMaximo) {
                             this.errors.foto = "O tamanho do arquivo excede o limite de 5MB.";
-                            this.admin.foto = this.backupFoto;
+                            this.previewProfilePic = this.backupFoto;
                             return;
                         }
 
                         const reader = new FileReader();
 
                         reader.onload = (e) => {
-                            this.admin.foto = e.target.result;
+                            this.previewProfilePic = e.target.result;
+                            this.admin.foto = file
                         };
 
                         reader.readAsDataURL(file);
                     } else {
-                        this.admin.foto = bckpFoto;
+                        this.previewProfilePic = bckpFoto;
                     }
+                },
+
+                alterarAdmin(){
+                    let arquivo = $("#fotoPerfil")[0].files[0];
+
+                    let form = this.getFormData()
+
+                    $.ajax({
+                        url: `${this.BASE_URL}api/admin/alterar`, // Substitua pela URL do servidor
+                        type: "POST",
+                        data: form,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            console.log("Resposta do servidor:", response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Erro na requisição:", error);
+                        }
+                    });
                 },
 
                 scrollHandleFuncionarios(event){
@@ -393,6 +416,21 @@
                     this.admin.nome = null
                     this.admin.email = null
                     this.admin.senha = null
+                },
+
+                getFormData(){
+                    let form = new FormData()
+
+                    form.append('admin[id]', this.admin.id)
+                    form.append('admin[nome]', this.admin.nome)
+                    form.append('admin[descricao]', this.admin.descricao)
+                    form.append('admin[telefone]', this.admin.telefone)
+                    form.append('admin[email]', this.admin.email)
+                    form.append('admin[senha]', this.admin.senha)
+
+                    form.append('foto', this.admin.foto)
+
+                    return form
                 }
             }
         }
