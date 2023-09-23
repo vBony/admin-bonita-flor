@@ -314,9 +314,6 @@
                         url: `${this.BASE_URL}api/admin-servicos/excluir`,
                         data: {id: id},
                         dataType: 'json',
-                            success: function (response) {
-                                alert("Serviço excluído com sucesso")
-                            },
                             error: (error) => {
                                 alert("Falha ao excluir o serviço, tente novamente mais tarde")
                                 this.adminServicos.push(obj);
