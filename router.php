@@ -18,3 +18,4 @@ $routes['/api/servicos/buscar-por-categoria'] = '/servicos/apiBuscarPorCategoria
 
 // servicoadmin
 $routes['/api/admin-servicos/cadastrar'] = '/adminServico/apiCadastrar';
+$routes['/api/admin-servicos/excluir'] = '/adminServico/apiExcluir';

@@ -21,31 +21,40 @@ class AdminServico extends modelHelper{
         parent::__construct();
     }
 
-    public function buscar($id = null){
+    public function buscarPorId($id, $idAdmin){
+        $sufix = self::$sufix;
+        $colunas = self::getColunas();
+
+        $sufixServico = Servico::$sufix;
+        $colunasServico = Servico::getColunas();
+
+        $colunasCategoria = Categoria::getColunas();
+        $sufixCategoria = Categoria::$sufix;
+
         $sql  = "SELECT 
-                    *
-                FROM {$this->table} ";
-        
-        if(!empty($id)){
-            $sql .= "WHERE id = :id";
-        }
+                    {$colunas},
+                    {$colunasServico},
+                    {$colunasCategoria}
+                FROM adminServico {$sufix}
+                INNER JOIN servico {$sufixServico} on {$sufixServico}.id = {$sufix}.idServico
+                    AND {$sufixServico}.excluido = 0
+                INNER JOIN categoria {$sufixCategoria} ON {$sufixServico}.idCategoria = {$sufixCategoria}.id
+                    AND {$sufixCategoria}.excluido = 0
+                WHERE {$sufix}.idAdmin = :idAdmin
+                AND {$sufix}.id = :id
+                AND {$sufix}.excluido = 0";
 
         $sql = $this->db->prepare($sql);
-
-        if(!empty($id)){
-            $sql->bindValue(':id', $id);
-        }
-
+        $sql->bindValue(':idAdmin', $idAdmin);
+        $sql->bindValue(':id', $id);
         $sql->execute();
 
+
         if($sql->rowCount() > 0){
-            if(!empty($id)){
-                $data = $sql->fetch(PDO::FETCH_ASSOC);
-                return $data;
-            }else{
-                $data = $sql->fetchAll(PDO::FETCH_ASSOC);
-                return $data;
-            }
+
+            $data = $sql->fetch(PDO::FETCH_NAMED);
+
+            return $this->setMapeamento($data);
         }
     }
 
@@ -144,6 +153,24 @@ class AdminServico extends modelHelper{
             exit($e->getMessage());
             // TODO: SALVAR ERRO NUMA TABELA DE LOG
 
+            return false;
+        }
+    }
+
+    public function excluir($id){
+        $sql = "UPDATE {$this->table} SET excluido = 1 WHERE id = :id";
+        $sql = $this->db->prepare($sql);
+
+        $sql->bindValue(':id', $id);
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $this->db->commit();
+
+            return true;
+        } catch(PDOException $e) {
+            $this->db->rollback();
             return false;
         }
     }

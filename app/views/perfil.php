@@ -167,8 +167,8 @@
                                         <tr v-for="(reg, index) in adminServicos" :key="index">
                                             <td class="align-middle">{{reg.servico.nome}}</td>
                                             <td class="align-middle">{{reg.servico.categoria.descricao}}</td>
-                                            <td class="text-center">
-                                                <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
+                                            <td class="text-center cursor-pointer" @click="excluirAdminServico(reg.id)">
+                                                <i class="fas fa-trash-alt text-danger"></i>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -260,7 +260,7 @@
                         url: `${this.BASE_URL}api/admin-servicos/cadastrar`,
                         data: servico,
                         dataType: 'json',
-                        success: function (response) {
+                        success: (response) => {
                             this.adminServicos = response.adminServicos
                         },
                         error: (error) => {
@@ -300,6 +300,29 @@
                             console.error("Erro na requisição GET:", data);
                         }
                     });
+                },
+
+                excluirAdminServico(id){
+                    let obj = this.adminServicos.find(item => item.id === id)
+                    let msg = `Confirma a exclusão do Serviço ${obj.servico.nome}?`
+
+                    if(confirm(msg)){
+                        this.adminServicos = this.adminServicos.filter(item => item.id !== id)
+
+                        $.ajax({
+                        type: "POST",
+                        url: `${this.BASE_URL}api/admin-servicos/excluir`,
+                        data: {id: id},
+                        dataType: 'json',
+                            success: function (response) {
+                                alert("Serviço excluído com sucesso")
+                            },
+                            error: (error) => {
+                                alert("Falha ao excluir o serviço, tente novamente mais tarde")
+                                this.adminServicos.push(obj);
+                            }
+                        });
+                    }
                 },
 
                 scrollHandleFuncionarios(event){
