@@ -35,7 +35,7 @@ class Admin{
                 if($this->validatePassword($data['senha'], $userFind['senha'])){
                     //Realizando a busca novamente para não salvar na sessão a senha
                     $userData =  $this->Admin->buscarPorEmail($data['email']);
-                    
+
                     $this->setSession($userData);
                     
                     return true;

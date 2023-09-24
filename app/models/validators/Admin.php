@@ -85,7 +85,7 @@ class Admin  {
 
     public function email($data){
         $email = $data['email'];
-        $id = $data['id'];
+        $id = isset($data['id']) ? $data['id'] : null;
         $Admin = new modelAdmin();
 
         if(empty($email)){
