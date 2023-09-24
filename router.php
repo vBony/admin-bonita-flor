@@ -3,7 +3,7 @@ global $routes;
 $routes = array();
 $routes['/'] = '/';
 
-// Admin/Funcionadio
+// Admin/Funcionario
 $routes['/funcionario/cadastrar'] = '/admin/viewCadastrar';
 $routes['/login'] = '/admin/viewLogin';
 $routes['/api/funcionario/cadastrar'] = '/admin/apiCadastrar';
@@ -17,6 +17,9 @@ $routes['/api/admin/alterar'] = '/admin/apiAlterar';
 // Serviços/Categorias
 $routes['/servicos/cadastrar'] = '/servicos/viewCadastrar';
 $routes['/api/servicos/buscar-por-categoria'] = '/servicos/apiBuscarPorCategoria';
+$routes['/api/categorias/buscar'] = '/categoria/apiBuscar';
+$routes['/categorias/cadastrar'] = '/categoria/viewCadastrar';
+$routes['/api/categorias/cadastrar'] = '/categoria/apiCadastrar';
 
 // servicoadmin
 $routes['/api/admin-servicos/cadastrar'] = '/adminServico/apiCadastrar';

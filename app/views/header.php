@@ -52,6 +52,13 @@
     </li>
 
     <li class="nav-item">
+        <a class="nav-link" href="<?=BASE_URL?>categorias/cadastrar">
+            <i class="fas fa-th-list"></i>
+            <span>Categorias</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
         <a class="nav-link" href="<?=BASE_URL?>servicos/cadastrar">
             <i class="fas fa-edit"></i>
             <span>Serviços</span>

@@ -51,6 +51,24 @@ class Categoria extends modelHelper{
         }
     }
 
+    public function salvar($data){
+        $sql = "INSERT INTO categoria SET descricao = :descricao";
+
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':descricao', $data["descricao"]);
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $this->db->commit();
+
+            return true;
+        } catch(PDOException $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
+
     public static function getColunas(){
         return parent::setColunas(self::$sufix, self::$attrs);
     }
