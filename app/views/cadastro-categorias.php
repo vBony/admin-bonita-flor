@@ -47,7 +47,7 @@
                                         <td class="align-middle">{{reg.descricao}}</td>
                                         <td class="text-right">
                                             <i class="fas fa-pen px-2 mx-2 text-warning cursor-pointer" @click="editar(reg.id)"></i>
-                                            <i class="fas fa-trash-alt px-2 mx-2 text-danger cursor-pointer" @click="excluir()"></i>
+                                            <i class="fas fa-trash-alt px-2 mx-2 text-danger cursor-pointer" @click="excluirCategoria(reg.id)"></i>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -157,7 +157,9 @@
                             this.categorias = response.categorias
                             this.categoria.descricao = null
                             alert("Categoria criada com sucesso!")
-                        
+
+                            this.limparCategoria()
+                            this.limparMensagens()
                         },
                         error: (error) => {
                             this.errors = error.responseJSON.errors
@@ -168,16 +170,59 @@
                 },
 
                 alterarCategoria(){
+                    let categoria = this.categoria
+
+                    $.ajax({
+                        type: "POST",
+                        url: `${this.BASE_URL}api/categorias/alterar`,
+                        dataType: "json",
+                        data: {categoria: categoria},
+                        success: (data) => {
+                            let categoriaAlterada = this.categorias.find(item => item.id === categoria.id)
+                            categoriaAlterada.descricao = categoria.descricao
+
+                            alert('Categoria alterada com sucesso!')
+                            $('#modalCadastroServico').modal('hide')
+
+                            this.limparCategoria()
+                            this.limparMensagens()
+                        },
+                        error: (data) => {
+                            // Função a ser executada em caso de erro
+                            this.errors = data.responseJSON.errors
+                        }
+                    });
+                },
+
+                excluirCategoria(id){
+                    let obj = this.categorias.find(item => item.id === id)
+                    let msg = `Confirma a exclusão da categoria ${obj.descricao}?`
+
+                    if(confirm(msg)){
+                        $.ajax({
+                            type: "POST",
+                            url: `${this.BASE_URL}api/categorias/excluir`,
+                            dataType: "json",
+                            data: {id: id},
+                            success: (data) => {
+                                this.categorias = this.categorias.filter(item => item.id !== id)
+                                alert('Categoria excluida com sucesso!')
+                            },
+                            error: (data) => {
+                                // Função a ser executada em caso de erro
+                                this.errors = data.responseJSON.errors
+                            }
+                        });
+                    }
                     
                 },
 
                 editar(id){
                     this.alterando = true
                     let obj = this.categorias.find(item => item.id === id)
+                    obj = JSON.stringify(obj)
 
-                    this.categoria = obj
-
-                    console.log(this.categoria);
+                    this.categoria = JSON.parse(obj)
 
                     $('#modalCadastroServico').modal('show')
                 },
