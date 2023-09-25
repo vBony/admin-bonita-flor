@@ -224,10 +224,9 @@
                 editar(id){
                     this.alterando = true
                     let obj = this.categorias.find(item => item.id === id)
+                    obj = JSON.stringify(obj)
 
-                    this.categoria = obj
-
-                    console.log(this.categoria);
+                    this.categoria = JSON.parse(obj)
 
                     $('#modalCadastroServico').modal('show')
                 },
