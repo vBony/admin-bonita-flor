@@ -14,9 +14,12 @@ $routes['/perfil'] = '/admin/viewAlterarAdmin';
 $routes['/api/admin/alterar'] = '/admin/apiAlterar';
 
 
-// Serviços/Categorias
+// Serviços
 $routes['/servicos/cadastrar'] = '/servicos/viewCadastrar';
 $routes['/api/servicos/buscar-por-categoria'] = '/servicos/apiBuscarPorCategoria';
+
+//Categorias
+$routes['/api/categorias/listar'] = '/categoria/apiListar';
 $routes['/api/categorias/buscar'] = '/categoria/apiBuscar';
 $routes['/categorias/cadastrar'] = '/categoria/viewCadastrar';
 $routes['/api/categorias/cadastrar'] = '/categoria/apiCadastrar';

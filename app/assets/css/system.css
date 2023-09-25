@@ -1,0 +1,16 @@
+.cursor-pointer{
+    cursor:pointer !important;
+}
+
+#table-list{
+    min-width: 500px !important;
+}
+
+#table-dad{
+    overflow: auto;
+}
+
+#table-dad{
+    max-height: 400px;
+    overflow: auto;
+}

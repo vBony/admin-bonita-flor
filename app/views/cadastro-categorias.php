@@ -20,6 +20,7 @@
     <!-- Custom styles for this template-->
     <link href="<?=BASE_URL?>app/assets/css/cadastro-categorias.css" rel="stylesheet">
     <link href="<?=BASE_URL?>app/assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="<?=BASE_URL?>app/assets/css/system.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 </head>
@@ -86,7 +87,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header d-flex justify-content-between py-3">
                         <h6 class="d-flex align-items-center align-middle font-weight-bold text-primary">Categorias ativas</h6>
-                        <button type="button" data-toggle="modal" data-target="#modalCadastroServico" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Novo</button>
+                        <button type="button" @click="novo()" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Novo</button>
                     </div>
                     <div class="card-body">
                         <div id="table-dad">
@@ -95,8 +96,8 @@
                                     <tr v-for="(reg, index) in categorias" :key="index">
                                         <td class="align-middle">{{reg.descricao}}</td>
                                         <td class="text-right">
-                                            <i class="fas fa-pen mr-2 text-warning"></i>
-                                            <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
+                                            <i class="fas fa-pen px-2 mx-2 text-warning cursor-pointer" @click="editar(reg.id)"></i>
+                                            <i class="fas fa-trash-alt px-2 mx-2 text-danger cursor-pointer" @click="excluir()"></i>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -110,7 +111,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-primary" id="exampleModalLongTitle">Criar Categoria</h5>
+                        <h5 class="modal-title text-primary" id="exampleModalLongTitle">{{alterando == true ? "Alterar Categoria" : "Criar Categoria"}}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -135,7 +136,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="button" @click="inserirCategoria()" class="btn btn-primary">Salvar</button>
+                        <button v-if="alterando == false" type="button" @click="inserirCategoria()" class="btn btn-primary">Salvar</button>
+                        <button v-if="alterando == true" type="button" @click="alterarCategoria()" class="btn btn-warning">Alterar</button>
                     </div>
                 </div>
             </div>
@@ -169,6 +171,8 @@
         const app = {
             data() {
                 return {
+                    alterando: false,
+
                     errors: {
                         descricao: null
                     },
@@ -213,12 +217,32 @@
                     });
                 },
 
-                
+                alterarCategoria(){
+                    
+                },
+
+                editar(id){
+                    this.alterando = true
+                    let obj = this.categorias.find(item => item.id === id)
+
+                    this.categoria = obj
+
+                    console.log(this.categoria);
+
+                    $('#modalCadastroServico').modal('show')
+                },
+
+                novo(){
+                    this.alterando = false
+                    this.limparCategoria()
+
+                    $('#modalCadastroServico').modal('show')
+                },
 
                 buscarDados(){
                     $.ajax({
                         type: "GET", // Método da requisição (GET)
-                        url: `${this.BASE_URL}api/categorias/buscar`, // URL da API ou recurso
+                        url: `${this.BASE_URL}api/categorias/listar`, // URL da API ou recurso
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
                         success: (data) => {
                             this.categorias = data.categorias
@@ -230,18 +254,20 @@
                     });
                 },
 
-                buscarServico(){
+                buscarCategoria(id){
+                    let idCategoria = id
+
                     $.ajax({
-                        type: "post", // Método da requisição (GET)
-                        url: `${this.BASE_URL}api/servicos/buscar-por-categoria`, // URL da API ou recurso
+                        type: "POST", // Método da requisição (GET)
+                        url: `${this.BASE_URL}api/categorias/buscar`, // URL da API ou recurso
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
-                        data: {idCategoria: this.servico.idCategoria},
+                        data: {id: idCategoria},
                         success: (data) => {
-                            this.servicos = data.servicos
+                            this.categoria = data.categoria
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
-                            console.error("Erro na requisição GET:", data);
+                            alert('Não foi possível realizar a busca da categoria!')
                         }
                     });
                 },
@@ -255,16 +281,13 @@
                     })
                 },
 
-                limparMensagens(){
-                    this.errors.nome = null
-                    this.errors.email = null
-                    this.errors.senha = null
+                limparCategoria(){
+                    this.categoria.id = null
+                    this.categoria.descricao = null
                 },
 
-                limparCampos(){
-                    this.admin.nome = null
-                    this.admin.email = null
-                    this.admin.senha = null
+                limparMensagens(){
+                    this.errors.descricao = null
                 }
             }
         }

@@ -51,6 +51,25 @@ class Categoria extends modelHelper{
         }
     }
 
+    public function buscarPorDescricao($descricao, $idExcecao = null){
+        $sql = "SELECT * FROM categoria c WHERE c.descricao = :descricao AND excluido = 0 ";
+
+        if(!empty($idExcecao)){
+            $sql .= "AND id = :id ";
+        }
+
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':descricao', $descricao);
+        if(!empty($idExcecao)){
+            $sql->bindValue(':id', $idExcecao);
+        }
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        }
+    }
+
     public function salvar($data){
         $sql = "INSERT INTO categoria SET descricao = :descricao";
 

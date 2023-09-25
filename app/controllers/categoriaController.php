@@ -4,10 +4,27 @@ use auth\Admin;
 use models\Categoria;
 use models\validators\Categoria as Validator;
 class categoriaController extends controllerHelper{
-    public function apiBuscar(){
+    public function apiListar(){
         $admin = $this->isLogged();
         $model = new Categoria();
         $this->send(200, ['categorias'=>$model->buscar()]);
+        
+    }
+
+    public function apiBuscar(){
+        $admin = $this->isLogged();
+        $model = new Categoria();
+
+        $id = $this->post('id');
+
+        $categoria = $model->buscar($id);
+
+        if(!empty($categoria)){
+            $this->send(200, ['categoria'=> $categoria]);
+        }else{
+            $this->send(404, ['categoria'=> $categoria]);
+        }
+
         
     }
 

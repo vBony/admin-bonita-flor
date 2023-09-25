@@ -3,6 +3,8 @@ namespace core;
 use core\Database;
 class modelHelper{
     protected $db;
+    public static $CRIANDO = 'insert';
+    public static $ALTERANDO = 'update';
 
     public function __construct() {
         $this->db = Database::getInstance();
