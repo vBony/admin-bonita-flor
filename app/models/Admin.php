@@ -80,7 +80,7 @@ class Admin extends modelHelper{
     }
 
     public function buscarPorEmail($email, $excecaoAdmin = null){
-        $sql  = "SELECT {$this->camposSeguros} FROM {$this->table} WHERE email = :email ";
+        $sql  = "SELECT {$this->camposSeguros} FROM {$this->table} WHERE email = :email  AND excluido = 0 ";
 
         if(!empty($excecaoAdmin)){
             $sql .= "AND id != :id ";
@@ -101,7 +101,7 @@ class Admin extends modelHelper{
     }
 
     public function buscarPorEmailNaoSeguro($email){
-        $sql = "SELECT {$this->campos} FROM {$this->table} WHERE email = :email";
+        $sql = "SELECT {$this->campos} FROM {$this->table} WHERE email = :email AND excluido = 0 ";
         $sql = $this->db->prepare($sql);
         $sql->bindValue(':email', strtolower($email));
         $sql->execute();
@@ -135,22 +135,32 @@ class Admin extends modelHelper{
     }
 
     public function alterar($idAdmin, $data){
+        $senha = $data['senha'];
+        
         $sql = "UPDATE
                     {$this->table}
                 SET
                     nome = :nome,
                     descricao = :descricao,
-                    email = :email,
-                    senha = :senha
-                WHERE
-                    id = :idAdmin";
+                    email = :email ";
+
+        if(!empty($senha)){
+            $sql .= ", senha = :senha "; 
+        }
+
+        $sql .= "WHERE id = :idAdmin";
+
+        // exit($sql);
 
         $sql = $this->db->prepare($sql);
         $sql->bindValue(':idAdmin', $idAdmin);
         $sql->bindValue(':nome', Sanitazer::nomeCompleto($data['nome']));
         $sql->bindValue(':email', Sanitazer::email($data['email']));
         $sql->bindValue(':descricao', Sanitazer::texto($data['descricao']));
-        $sql->bindValue(':senha', password_hash($data['senha'], PASSWORD_BCRYPT));
+
+        if(!empty($senha)){
+            $sql->bindValue(':senha', password_hash($senha, PASSWORD_BCRYPT));
+        }
 
         try {
             $this->db->beginTransaction();

@@ -287,6 +287,7 @@
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
                         success: (data) => {
                             this.admin = data.admin
+                            this.admin.senha = null // Recuperando a prop senha, pois o backend não retorna
                             this.categorias = data.listas.categorias
                             this.adminServicos = data.listas.adminServicos
 
@@ -392,13 +393,11 @@
                         contentType: false,
                         success: (response) => {
                             alert('Dados alterados com sucesso!')
-                            location.reload();
+                            // location.reload();
                         },
                         error: (error) => {
                             let errorsObj = JSON.parse(error.responseText)
                             this.errors.admin = errorsObj.errors.admin
-
-                            console.log(this.errors.admin);
                         }
                     });
                 },
@@ -432,7 +431,9 @@
                     form.append('admin[descricao]', this.admin.descricao)
                     form.append('admin[telefone]', this.admin.telefone)
                     form.append('admin[email]', this.admin.email)
-                    form.append('admin[senha]', this.admin.senha)
+                    form.append('admin[senha]', this.admin.senha == null ? "" : this.admin.senha)
+
+                    console.log(this.admin);
 
                     form.append('foto', this.admin.foto)
 

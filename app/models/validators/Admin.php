@@ -123,8 +123,6 @@ class Admin  {
             if(strlen($pass) < 5 && $this->type == self::$CRIANDO){
                 $this->messages['senha'] = 'A senha deve conter no mínimo 5 caracteres';
             }
-        }else{
-            $this->messages['senha'] = $this->emptyMessage;
         }
     }
 
@@ -135,6 +133,8 @@ class Admin  {
             if(strlen($pass) < 5 && $this->type == self::$CRIANDO){
                 $this->messages['senha'] = 'A senha deve conter no mínimo 5 caracteres';
             }
+        }else{
+            $this->messages['senha'] = $this->emptyMessage;
         }
     }
 

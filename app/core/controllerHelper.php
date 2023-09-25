@@ -56,12 +56,12 @@ class controllerHelper{
 
     public function isLogged(){
         $auth = new AdminAuth();
-        // $auth->isLogged();
+        $auth->isLogged();
 
-        // $idAdmin = $auth->getIdUserLogged();
+        $idAdmin = $auth->getIdUserLogged();
 
         $admin = new AdminModel();
-        return $admin->buscar(5);
+        return $admin->buscar($idAdmin);
     }
 }
 
