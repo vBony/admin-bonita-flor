@@ -54,10 +54,11 @@ class Admin extends modelHelper{
     public function buscar($id = null){
         $sql  = "SELECT 
                     {$this->camposSeguros}
-                FROM {$this->table} ";
+                FROM {$this->table}
+                WHERE excluido = 0 ";
         
         if(!empty($id)){
-            $sql .= "WHERE id = :id";
+            $sql .= "AND id = :id";
         }
 
         $sql = $this->db->prepare($sql);
