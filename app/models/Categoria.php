@@ -55,7 +55,7 @@ class Categoria extends modelHelper{
         $sql = "SELECT * FROM categoria c WHERE c.descricao = :descricao AND excluido = 0 ";
 
         if(!empty($idExcecao)){
-            $sql .= "AND id = :id ";
+            $sql .= "AND id != :id ";
         }
 
         $sql = $this->db->prepare($sql);
@@ -75,6 +75,43 @@ class Categoria extends modelHelper{
 
         $sql = $this->db->prepare($sql);
         $sql->bindValue(':descricao', $data["descricao"]);
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $this->db->commit();
+
+            return true;
+        } catch(PDOException $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
+
+    public function alterar($data){
+        $sql = "UPDATE {$this->table} SET descricao = :descricao WHERE id = :id";
+
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':descricao', $data["descricao"]);
+        $sql->bindValue(':id', $data["id"]);
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $this->db->commit();
+
+            return true;
+        } catch(PDOException $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
+
+    public function excluir($id){
+        $sql = "UPDATE {$this->table} SET excluido = 1 WHERE id = :id";
+        $sql = $this->db->prepare($sql);
+
+        $sql->bindValue(':id', $id);
 
         try {
             $this->db->beginTransaction();

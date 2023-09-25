@@ -23,7 +23,9 @@ $routes['/api/categorias/listar'] = '/categoria/apiListar';
 $routes['/api/categorias/buscar'] = '/categoria/apiBuscar';
 $routes['/categorias/cadastrar'] = '/categoria/viewCadastrar';
 $routes['/api/categorias/cadastrar'] = '/categoria/apiCadastrar';
+$routes['/api/categorias/alterar'] = '/categoria/apiAlterar';
+$routes['/api/categorias/excluir'] = '/categoria/apiExcluir';
 
-// servicoadmin
+// servicoAdmin
 $routes['/api/admin-servicos/cadastrar'] = '/adminServico/apiCadastrar';
 $routes['/api/admin-servicos/excluir'] = '/adminServico/apiExcluir';

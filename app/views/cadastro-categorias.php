@@ -33,56 +33,6 @@
             <h1 class="h3 mb-0 text-gray-800">Cadastro de categorias</h1>
         </div>
         <div class="row">
-            <!-- <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Cadastro de categoria e serviços</h6>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted">Selecione os serviços que você pode atender.</p>
-                        <form>
-                            <div class="form-row align-items-center">
-                                <div class="col-lg-10 col-md-12 mb-3">
-                                    <label for="categoriaCadastro">Categoria</label>
-                                    <form class="form-inline">
-                                        <input type="text" class="form-control" id="inputPassword2">
-                                    </form>
-                                    <div v-if="errors.adminServico.categoria" class="invalid-feedback">{{errors.adminServico.categoria}}</div>
-                                </div>
-                                <div class="col-lg-2 col-md-12 mb-3">
-                                    <label for="categoriaCadastro">&nbsp;</label>
-                                    <input type="submit" @click.prevent="inserirServico()" class="btn btn-success form-control" value="Adicionar">
-                                </div>
-                            </div>
-                        </form>
-                        <hr>
-                        <div class="col-12 flex-row d-flex justify-content-between align-items-center mb-2">
-                            <h4 class="text-secondary align-middle m-0">Seviços</h4>
-                            <button type="button" data-toggle="modal" data-target="#modalCadastroServico" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Novo</button>
-                        </div>
-                       
-                        <div id="table-dad" @scroll="scrollHandleFuncionarios($event)">
-                            <table class="table" id="table-list">
-                                <thead id="theadAdmins" class="bg-white">
-                                    <tr id="trTransacoes">
-                                        <th scope="col">Nome</th>
-                                        <th scope="col" class="text-center"></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="servicos-area">
-                                    <tr v-for="(reg, index) in adminServicos" :key="index">
-                                        <td class="align-middle">{{reg.nome}}</td>
-                                        <td class="text-center">
-                                            <i class="fas fa-pen mr-2 text-warning"></i>
-                                            <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div class="col-12">
                 <div class="card shadow mb-4">
                     <div class="card-header d-flex justify-content-between py-3">
@@ -97,7 +47,7 @@
                                         <td class="align-middle">{{reg.descricao}}</td>
                                         <td class="text-right">
                                             <i class="fas fa-pen px-2 mx-2 text-warning cursor-pointer" @click="editar(reg.id)"></i>
-                                            <i class="fas fa-trash-alt px-2 mx-2 text-danger cursor-pointer" @click="excluir()"></i>
+                                            <i class="fas fa-trash-alt px-2 mx-2 text-danger cursor-pointer" @click="excluirCategoria(reg.id)"></i>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -207,7 +157,9 @@
                             this.categorias = response.categorias
                             this.categoria.descricao = null
                             alert("Categoria criada com sucesso!")
-                        
+
+                            this.limparCategoria()
+                            this.limparMensagens()
                         },
                         error: (error) => {
                             this.errors = error.responseJSON.errors
@@ -218,6 +170,50 @@
                 },
 
                 alterarCategoria(){
+                    let categoria = this.categoria
+
+                    $.ajax({
+                        type: "POST",
+                        url: `${this.BASE_URL}api/categorias/alterar`,
+                        dataType: "json",
+                        data: {categoria: categoria},
+                        success: (data) => {
+                            let categoriaAlterada = this.categorias.find(item => item.id === categoria.id)
+                            categoriaAlterada.descricao = categoria.descricao
+
+                            alert('Categoria alterada com sucesso!')
+                            $('#modalCadastroServico').modal('hide')
+
+                            this.limparCategoria()
+                            this.limparMensagens()
+                        },
+                        error: (data) => {
+                            // Função a ser executada em caso de erro
+                            this.errors = data.responseJSON.errors
+                        }
+                    });
+                },
+
+                excluirCategoria(id){
+                    let obj = this.categorias.find(item => item.id === id)
+                    let msg = `Confirma a exclusão da categoria ${obj.descricao}?`
+
+                    if(confirm(msg)){
+                        $.ajax({
+                            type: "POST",
+                            url: `${this.BASE_URL}api/categorias/excluir`,
+                            dataType: "json",
+                            data: {id: id},
+                            success: (data) => {
+                                this.categorias = this.categorias.filter(item => item.id !== id)
+                                alert('Categoria excluida com sucesso!')
+                            },
+                            error: (data) => {
+                                // Função a ser executada em caso de erro
+                                this.errors = data.responseJSON.errors
+                            }
+                        });
+                    }
                     
                 },
 
