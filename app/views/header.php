@@ -6,7 +6,7 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?=BASE_URL?>">
-        <div class="sidebar-brand-text mx-3">Bonita Flor</div>
+        <div class="sidebar-brand-text mx-3">Maria Flor</div>
     </a>
 
     <!-- Divider -->

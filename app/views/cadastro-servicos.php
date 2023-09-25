@@ -32,7 +32,7 @@
             <h1 class="h3 mb-0 text-gray-800">Cadastro de categorias</h1>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Cadastro de categoria e serviços</h6>
@@ -41,22 +41,19 @@
                         <p class="text-muted">Selecione os serviços que você pode atender.</p>
                         <form>
                             <div class="form-row align-items-center">
-                                <div class="col-lg-10 col-md-12 mb-3">
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                     <label for="categoriaCadastro">Categoria</label>
-                                    <form class="form-inline">
-                                        <input type="text" class="form-control" id="inputPassword2">
-                                    </form>
-                                    <!-- <div v-if="errors.adminServico.categoria" class="invalid-feedback">{{errors.adminServico.categoria}}</div> -->
-                                </div>
-                                <div class="col-lg-2 col-md-12 mb-3">
-                                    <label for="categoriaCadastro">&nbsp;</label>
-                                    <input type="submit" @click.prevent="inserirServico()" class="btn btn-success form-control" value="Adicionar">
+                                    <select class="form-control" aria-label="Default select example">
+                                        <option selected></option>
+                                        <option value="1">Unha</option>
+                                        <option value="2">Sobrancelha</option>
+                                    </select>
                                 </div>
                             </div>
                         </form>
                         <hr>
                         <div class="col-12 flex-row d-flex justify-content-between align-items-center mb-2">
-                            <h4 class="text-secondary align-middle m-0">Seviços</h4>
+                            <h4 class="text-secondary align-middle m-0">Serviços</h4>
                             <button type="button" data-toggle="modal" data-target="#modalCadastroServico" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Novo</button>
                         </div>
                        
@@ -65,12 +62,15 @@
                                 <thead id="theadAdmins" class="bg-white">
                                     <tr id="trTransacoes">
                                         <th scope="col">Nome</th>
+                                        <th scope="col">Preço</th>
                                         <th scope="col" class="text-center"></th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody id="servicos-area">
-                                    <tr v-for="(reg, index) in adminServicos" :key="index">
-                                        <td class="align-middle">{{reg.nome}}</td>
+                                    <tr v-for="(reg, index) in servicos" :key="index">
+                                        <td class="align-middle">{{reg.descricao}}</td>
+                                        <td>R$20</td>
                                         <td class="text-center">
                                             <i class="fas fa-pen mr-2 text-warning"></i>
                                             <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
@@ -82,7 +82,95 @@
                     </div>
                 </div>
             </div>
-            
+            <div class="modal fade" id="modalCadastroServico" tabindex="-1" role="dialog" aria-labelledby="modalCadastroServico" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-primary" id="exampleModalLongTitle">{{alterando == true ? "Alterar Categoria" : "Cadrastar Serviço"}}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Categoria</label>
+                                        <input 
+                                            v-model="categoria.descricao" 
+                                            type="name" 
+                                            class="form-control" 
+                                            id="nomeCategoria" 
+                                            :class="{ 'is-invalid': errors.descricao}"
+                                            @input="errors.descricao = null"
+                                            disabled
+                                        >
+                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Nome Serviço</label>
+                                        <input 
+                                            v-model="categoria.descricao" 
+                                            type="name" 
+                                            class="form-control" 
+                                            id="nomeCategoria" 
+                                            :class="{ 'is-invalid': errors.descricao}"
+                                            @input="errors.descricao = null"
+                                        >
+                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Preço</label>
+                                        <input 
+                                            v-model="categoria.descricao" 
+                                            type="name" 
+                                            class="form-control" 
+                                            id="nomeCategoria" 
+                                            :class="{ 'is-invalid': errors.descricao}"
+                                            @input="errors.descricao = null"
+                                        >
+                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Duração</label>
+                                        <input 
+                                            v-model="categoria.descricao" 
+                                            type="name" 
+                                            class="form-control" 
+                                            id="nomeCategoria" 
+                                            :class="{ 'is-invalid': errors.descricao}"
+                                            @input="errors.descricao = null"
+                                        >
+                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Descrição</label>
+                                        <div class="input-group">
+                                            <textarea class="form-control" aria-label="With textarea"></textarea>
+                                        </div>
+                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button v-if="alterando == false" type="button" @click="inserirCategoria()" class="btn btn-primary">Salvar</button>
+                            <button v-if="alterando == true" type="button" @click="alterarCategoria()" class="btn btn-warning">Alterar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php $this->loadComponent('footer')  ?>
@@ -112,6 +200,7 @@
         const app = {
             data() {
                 return {
+                    alterando: false,
                     errors: {
                         descricao: null
                     },
@@ -121,7 +210,9 @@
                         descricao: null
                     },
                     
-                    categorias: [],
+                    servicos: [
+                        {descricao:"Unha de Gel"}
+                    ],
                     
                     BASE_URL: $('#burl').val()
                 }
@@ -156,8 +247,25 @@
                     });
                 },
 
-                
+                editar(id){
+                    this.alterando = true
+                    let obj = this.categorias.find(item => item.id === id)
 
+                    this.categoria = obj
+
+                    console.log(this.categoria);
+
+                    $('#modalCadastroServico').modal('show')
+                },
+
+                novo(){
+                    this.alterando = false
+                    this.limparCategoria()
+
+                    $('#modalCadastroServico').modal('show')
+                },
+
+                
                 buscarDados(){
                     $.ajax({
                         type: "GET", // Método da requisição (GET)
