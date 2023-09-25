@@ -127,7 +127,6 @@
                                             v-model="servico.idCategoria" 
                                             @change="buscarServico(); errors.adminServico.categoria = null"
                                             :class="{ 'is-invalid': errors.adminServico.categoria }"
-                                            
                                         >
                                             <option selected :value="null">Selecione</option>
                                             <option :value="reg.id" v-for="(reg, index) in categorias">{{reg.descricao}}</option>

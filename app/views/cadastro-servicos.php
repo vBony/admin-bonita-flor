@@ -29,24 +29,22 @@
     <div class="container-fluid" id="app">
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Cadastro de categorias</h1>
+            <h1 class="h3 mb-0 text-gray-800">Serviços</h1>
         </div>
         <div class="row">
             <div class="col-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Cadastro de categoria e serviços</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Cadastro de Serviços</h6>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Selecione os serviços que você pode atender.</p>
                         <form>
                             <div class="form-row align-items-center">
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                     <label for="categoriaCadastro">Categoria</label>
-                                    <select class="form-control" aria-label="Default select example">
-                                        <option selected></option>
-                                        <option value="1">Unha</option>
-                                        <option value="2">Sobrancelha</option>
+                                    <select class="form-control">
+                                        <option selected :value="null"></option>
+                                        <option :value="reg.id" v-for="(reg, index) in lista.categorias">{{reg.descricao}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -213,6 +211,10 @@
                     servicos: [
                         {descricao:"Unha de Gel"}
                     ],
+
+                    lista: {
+                        categorias: []
+                    },
                     
                     BASE_URL: $('#burl').val()
                 }
@@ -269,10 +271,10 @@
                 buscarDados(){
                     $.ajax({
                         type: "GET", // Método da requisição (GET)
-                        url: `${this.BASE_URL}api/categorias/buscar`, // URL da API ou recurso
+                        url: `${this.BASE_URL}api/servicos`, // URL da API ou recurso
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
                         success: (data) => {
-                            this.categorias = data.categorias
+                            this.lista.categorias = data.lista.categorias
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
