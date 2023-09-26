@@ -69,6 +69,29 @@ class Servico extends modelHelper{
         }
     }
 
+    public function buscarPorNome($nome, $idCategoria, $idExcecao = null){
+        $sql = "SELECT * FROM {$this->table} 
+                WHERE nome = :nome 
+                AND excluido = 0 
+                AND idCategoria = :idCategoria ";
+
+        if(!empty($idExcecao)){
+            $sql .= "AND id != :id ";
+        }
+
+        $sql = $this->db->prepare($sql);
+        $sql->bindValue(':nome', $nome);
+        $sql->bindValue(':idCategoria', $idCategoria);
+        if(!empty($idExcecao)){
+            $sql->bindValue(':id', $idExcecao);
+        }
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            return $sql->fetch(PDO::FETCH_ASSOC);
+        }
+    }
+
     public static function getColunas(){
         return parent::setColunas(self::$sufix, self::$attrs);
     }

@@ -309,13 +309,13 @@
                     let obj =  this.lista.categorias.find(item => item.id === this.categoria.id)
                     this.categoria.descricao = obj.descricao
 
-                    console.log(this.categoria);
+                    let idCategoria = this.categoria.id
 
                     $.ajax({
-                        type: "post", // Método da requisição (GET)
+                        type: "POST", // Método da requisição (GET)
                         url: `${this.BASE_URL}api/servicos/buscar-por-categoria`, // URL da API ou recurso
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
-                        data: {idCategoria: this.idCategoria},
+                        data: {idCategoria: idCategoria},
                         success: (data) => {
                             this.servicos = data.servicos
                         },
