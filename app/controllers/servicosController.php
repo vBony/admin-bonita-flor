@@ -30,6 +30,10 @@ class servicosController extends controllerHelper{
         }
     }
 
+    public function apiCadastrar(){
+        $this->send(200, $this->post());
+    }
+
     
 
 }

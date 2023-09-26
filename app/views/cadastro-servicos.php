@@ -42,7 +42,7 @@
                             <div class="form-row align-items-center">
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                     <label for="categoriaCadastro">Categoria</label>
-                                    <select class="form-control">
+                                    <select class="form-control" @change="buscarServicos()" v-model="categoria.id">
                                         <option selected :value="null"></option>
                                         <option :value="reg.id" v-for="(reg, index) in lista.categorias">{{reg.descricao}}</option>
                                     </select>
@@ -50,12 +50,12 @@
                             </div>
                         </form>
                         <hr>
-                        <div class="col-12 flex-row d-flex justify-content-between align-items-center mb-2">
+                        <div class="col-12 flex-row d-flex justify-content-between align-items-center mb-2 " v-if="categoria.id !== null">
                             <h4 class="text-secondary align-middle m-0">Serviços</h4>
                             <button type="button" data-toggle="modal" data-target="#modalCadastroServico" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Novo</button>
                         </div>
                        
-                        <div id="table-dad" @scroll="scrollHandleFuncionarios($event)">
+                        <div id="table-dad" @scroll="scrollHandleFuncionarios($event)" v-if="categoria.id !== null">
                             <table class="table" id="table-list">
                                 <thead id="theadAdmins" class="bg-white">
                                     <tr id="trTransacoes">
@@ -67,7 +67,7 @@
                                 </thead>
                                 <tbody id="servicos-area">
                                     <tr v-for="(reg, index) in servicos" :key="index">
-                                        <td class="align-middle">{{reg.descricao}}</td>
+                                        <td class="align-middle">{{reg.nome}}</td>
                                         <td>R$20</td>
                                         <td class="text-center">
                                             <i class="fas fa-pen mr-2 text-warning"></i>
@@ -98,61 +98,56 @@
                                             v-model="categoria.descricao" 
                                             type="name" 
                                             class="form-control" 
-                                            id="nomeCategoria" 
-                                            :class="{ 'is-invalid': errors.descricao}"
-                                            @input="errors.descricao = null"
+                                            id="nomeCategoria"
                                             disabled
                                         >
-                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 mb-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Nome Serviço</label>
                                         <input 
-                                            v-model="categoria.descricao" 
+                                            v-model="servico.nome" 
                                             type="name" 
                                             class="form-control" 
-                                            id="nomeCategoria" 
-                                            :class="{ 'is-invalid': errors.descricao}"
-                                            @input="errors.descricao = null"
+                                            id="nomeServico" 
+                                            :class="{ 'is-invalid': errors.nome}"
+                                            @input="errors.nome = null"
                                         >
-                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                        <div v-if="errors.nome" class="invalid-feedback">{{errors.nome}}</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 mb-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Preço</label>
                                         <input 
-                                            v-model="categoria.descricao" 
                                             type="name" 
                                             class="form-control" 
-                                            id="nomeCategoria" 
-                                            :class="{ 'is-invalid': errors.descricao}"
-                                            @input="errors.descricao = null"
+                                            id="precoServico" 
+                                            :class="{ 'is-invalid': errors.preco}"
+                                            @input="errors.preco = null"
                                         >
-                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                        <div v-if="errors.preco" class="invalid-feedback">{{errors.preco}}</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 mb-3">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Duração</label>
+                                        <label for="exampleInputEmail1">Duração (Horas/minutos)</label>
                                         <input 
-                                            v-model="categoria.descricao" 
                                             type="name" 
                                             class="form-control" 
-                                            id="nomeCategoria" 
-                                            :class="{ 'is-invalid': errors.descricao}"
-                                            @input="errors.descricao = null"
+                                            id="duracaoServico" 
+                                            :class="{ 'is-invalid': errors.duracao}"
+                                            @input="errors.duracao = null"
                                         >
-                                        <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
+                                        <div v-if="errors.duracao" class="invalid-feedback">{{errors.duracao}}</div>
                                     </div>
                                 </div>
                                 <div class="col-12 mb-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Descrição</label>
                                         <div class="input-group">
-                                            <textarea class="form-control" aria-label="With textarea"></textarea>
+                                            <textarea v-model="servico.descricao" class="form-control" aria-label="With textarea"></textarea>
                                         </div>
                                         <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
                                     </div>
@@ -162,8 +157,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                            <button v-if="alterando == false" type="button" @click="inserirCategoria()" class="btn btn-primary">Salvar</button>
-                            <button v-if="alterando == true" type="button" @click="alterarCategoria()" class="btn btn-warning">Alterar</button>
+                            <button v-if="alterando == false" type="button" @click="inserirServico()" class="btn btn-primary">Salvar</button>
+                            <button v-if="alterando == true" type="button" @click="alterarServico()" class="btn btn-warning">Alterar</button>
                         </div>
                     </div>
                 </div>
@@ -190,6 +185,11 @@
     <script src="<?=BASE_URL?>app/assets/js/demo/chart-area-demo.js"></script>
     <script src="<?=BASE_URL?>app/assets/js/demo/chart-pie-demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <script src="<?=BASE_URL?>app/assets/libs/maskMoney.js"></script>    
+
+    <script src="<?=BASE_URL?>app/assets/libs/jquery.mask.js"></script>  
+
     <input type="hidden" id="burl" value="<?=BASE_URL?>">
 
     <script>
@@ -200,17 +200,28 @@
                 return {
                     alterando: false,
                     errors: {
-                        descricao: null
+                        idCategoria: null,
+                        nome: null,
+                        descricao: null,
+                        preco: null, 
+                        duracao: null
                     },
 
                     categoria: {
                         id: null,
                         descricao: null
                     },
+
+                    servico: {
+                        id: null,
+                        idCategoria: null,
+                        nome: null,
+                        descricao: null,
+                        preco: null, 
+                        duracao: null,
+                    },
                     
-                    servicos: [
-                        {descricao:"Unha de Gel"}
-                    ],
+                    servicos: [],
 
                     lista: {
                         categorias: []
@@ -220,25 +231,35 @@
                 }
             },
             mounted() {
+                $("#precoServico").maskMoney({
+                    prefix:"R$",
+                    decimal:",",
+                    thousands:".",
+                })
+                
+                $("#duracaoServico").mask("00:00")
+                   
                 this.buscarDados()
+
             },
 
             methods: {
-                inserirCategoria(){
-                    let categoria = this.categoria
+                inserirServico(){
+                    let servico = this.servico
 
-                    this.limparMensagens()
+                    servico.preco = $("#precoServico").maskMoney('unmasked')[0]
+                    servico.duracao = $("#duracaoServico").val()
+                    servico.idCategoria = this.categoria.id
+
+                    // this.limparMensagens()
 
                     $.ajax({
                         type: "POST", // Método da requisição
-                        url: `${this.BASE_URL}api/categorias/cadastrar`, // URL do servidor
-                        data: categoria, // Dados no formato JSON
+                        url: `${this.BASE_URL}api/servicos/cadastrar`, // URL do servidor
+                        data: servico, // Dados no formato JSON
                         dataType: 'json',
                         success: (response)=> {
                             // Função a ser executada em caso de sucesso
-                            this.categorias = response.categorias
-                            this.categoria.descricao = null
-                            alert("Categoria criada com sucesso!")
                         
                         },
                         error: (error) => {
@@ -283,12 +304,18 @@
                     });
                 },
 
-                buscarServico(){
+                buscarServicos(){
+
+                    let obj =  this.lista.categorias.find(item => item.id === this.categoria.id)
+                    this.categoria.descricao = obj.descricao
+
+                    console.log(this.categoria);
+
                     $.ajax({
                         type: "post", // Método da requisição (GET)
                         url: `${this.BASE_URL}api/servicos/buscar-por-categoria`, // URL da API ou recurso
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
-                        data: {idCategoria: this.servico.idCategoria},
+                        data: {idCategoria: this.idCategoria},
                         success: (data) => {
                             this.servicos = data.servicos
                         },
@@ -309,15 +336,19 @@
                 },
 
                 limparMensagens(){
-                    this.errors.nome = null
-                    this.errors.email = null
-                    this.errors.senha = null
+                    this.errors.servico.nome = null
+                    this.errors.servico.duracao = null
+                    this.errors.servico.preco = null
+                    this.errors.servico.descricao = null
+                    this.errors.servico.idCategoria = null
                 },
 
-                limparCampos(){
-                    this.admin.nome = null
-                    this.admin.email = null
-                    this.admin.senha = null
+                limparServico(){
+                    this.servico.nome = null
+                    this.servico.duracao = null
+                    this.servico.preco = null
+                    this.servico.descricao = null
+                    this.servico.idCategoria = null
                 }
             }
         }
