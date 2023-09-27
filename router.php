@@ -19,6 +19,7 @@ $routes['/servicos/cadastrar'] = '/servicos/viewCadastrar';
 $routes['/api/servicos/buscar-por-categoria'] = '/servicos/apiBuscarPorCategoria';
 $routes['/api/servicos'] = '/servicos/apiIndex';
 $routes['/api/servicos/cadastrar'] = '/servicos/apiCadastrar';
+$routes['/api/servicos/excluir'] = '/servicos/apiExcluir';
 
 //Categorias
 $routes['/api/categorias/listar'] = '/categoria/apiListar';

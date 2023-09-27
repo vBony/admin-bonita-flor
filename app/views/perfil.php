@@ -392,7 +392,7 @@
                         contentType: false,
                         success: (response) => {
                             alert('Dados alterados com sucesso!')
-                            // location.reload();
+                            location.reload();
                         },
                         error: (error) => {
                             let errorsObj = JSON.parse(error.responseText)

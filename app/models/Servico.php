@@ -92,6 +92,25 @@ class Servico extends modelHelper{
         }
     }
 
+    public function excluir($id){
+        $sql = "UPDATE {$this->table} SET excluido = 1 WHERE id = :id";
+        $sql = $this->db->prepare($sql);
+
+        $sql->bindValue(':id', $id);
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $this->db->commit();
+
+            return true;
+        } catch(PDOException $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
+
+
     public function salvar($data){
         $sql = "INSERT INTO
                     {$this->table}

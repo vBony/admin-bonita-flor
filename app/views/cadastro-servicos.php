@@ -321,8 +321,6 @@
                     let obj = this.servicos.find(item => item.id === id)
                     let msg = `Confirma a exclusão do serviço ${obj.nome}?`
 
-                    return
-
                     if(confirm(msg)){
                         $.ajax({
                             type: "POST",
@@ -331,11 +329,12 @@
                             data: {id: id},
                             success: (data) => {
                                 this.servicos = this.servicos.filter(item => item.id !== id)
-                                alert('Categoria excluida com sucesso!')
+                                alert('Serviço excluido com sucesso!')
                             },
                             error: (data) => {
                                 // Função a ser executada em caso de erro
-                                this.errors = data.responseJSON.errors
+                                alert('Houve um problema ao excluir o serviço, tente novamente mais tarde')
+                                location.reload();
                             }
                         });
                     }

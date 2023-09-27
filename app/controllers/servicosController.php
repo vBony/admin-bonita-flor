@@ -52,4 +52,25 @@ class servicosController extends controllerHelper{
             }
         }
     }
+
+    public function apiExcluir(){
+        $admin = $this->isLogged();
+        $id = $this->post('id');
+
+        if(!empty($id)){
+            $model = new Model();
+
+            $categoria = $model->buscar($id);
+
+            if(!empty($categoria)){
+                $sucesso = $model->excluir($id);
+            }
+        }
+
+        if($sucesso){
+            $this->send(200);
+        }else{
+            $this->send(500);
+        }
+    }
 }
