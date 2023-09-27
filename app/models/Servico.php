@@ -2,6 +2,8 @@
 namespace models;
 use core\modelHelper;
 
+use core\sanitazerHelper as Sanitazer;
+
 use \PDO;
 use \PDOException;
 
@@ -132,7 +134,7 @@ class Servico extends modelHelper{
         $sql = $this->db->prepare($sql);
         $sql->bindValue(':idCategoria', $data["idCategoria"]);
         $sql->bindValue(':descricao', $data["descricao"]);
-        $sql->bindValue(':nome', $data["nome"]);
+        $sql->bindValue(':nome', Sanitazer::nomeCompleto($data["nome"]));
         $sql->bindValue(':preco', $data["preco"]);
         $sql->bindValue(':duracao', $data["duracao"]);
 
