@@ -53,7 +53,7 @@
                         <hr>
                         <div class="col-12 flex-row d-flex justify-content-between align-items-center mb-2 " v-if="categoria.id !== null">
                             <h4 class="text-secondary align-middle m-0">Serviços</h4>
-                            <button type="button" data-toggle="modal" data-target="#modalCadastroServico" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Novo</button>
+                            <button type="button" @click="novoServico()" class="btn btn-primary"><i class="fas fa-plus mr-2"></i>Novo</button>
                         </div>
                        
                         <div id="table-dad" @scroll="scrollHandleFuncionarios($event)" v-if="categoria.id !== null">
@@ -69,7 +69,7 @@
                                 <tbody id="servicos-area">
                                     <tr v-for="(reg, index) in servicos" :key="index">
                                         <td class="align-middle">{{reg.nome}}</td>
-                                        <td class="listaPreco">{{reg.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
+                                        <td class="listaPreco">{{floatParaReal(reg.preco)}}</td>
                                         <td class="text-center">
                                             <i class="fas fa-pen mr-2 text-warning cursor-pointer px-2" @click="editarServico(reg.id)"></i>
                                             <i class="fas fa-trash-alt text-danger cursor-pointer px-2" @click="excluirServico(reg.id)"></i>
@@ -286,7 +286,12 @@
                     this.alterando = true
                     let obj = this.servicos.find(item => item.id === id)
 
-                    this.servico = obj
+                    this.limparMensagens()
+
+                    // Passando para json para não torna-lo reativo
+                    obj = JSON.stringify(obj)
+                    this.servico = JSON.parse(obj)
+
                     // $('#precoServico').val(this.servico.preco)
                     $("#precoServico").maskMoney('mask', this.servico.preco)
 
@@ -295,9 +300,9 @@
                     $('#modalCadastroServico').modal('show')
                 },
 
-                novo(){
+                novoServico(){
                     this.alterando = false
-                    this.limparCategoria()
+                    this.limparServico()
 
                     $('#modalCadastroServico').modal('show')
                 },
@@ -378,11 +383,11 @@
                 },
 
                 limparMensagens(){
-                    this.errors.servico.nome = null
-                    this.errors.servico.duracao = null
-                    this.errors.servico.preco = null
-                    this.errors.servico.descricao = null
-                    this.errors.servico.idCategoria = null
+                    this.errors.nome = null
+                    this.errors.duracao = null
+                    this.errors.preco = null
+                    this.errors.descricao = null
+                    this.errors.idCategoria = null
                 },
 
                 limparServico(){
@@ -391,6 +396,18 @@
                     this.servico.preco = null
                     this.servico.descricao = null
                     this.servico.idCategoria = null
+                    this.servico.id = null
+
+                    $('#precoServico').val('')
+                    $('#duracaoServico').val('')
+                },
+
+                floatParaReal(num){
+                    let float = JSON.stringify(num)
+
+                    float = JSON.parse(float)
+
+                    return float.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
                 }
             }
         }
