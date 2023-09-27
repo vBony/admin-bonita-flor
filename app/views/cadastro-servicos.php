@@ -20,6 +20,7 @@
     <!-- Custom styles for this template-->
     <link href="<?=BASE_URL?>app/assets/css/cadastro-categorias.css" rel="stylesheet">
     <link href="<?=BASE_URL?>app/assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="<?=BASE_URL?>app/assets/css/system.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 </head>
@@ -70,8 +71,8 @@
                                         <td class="align-middle">{{reg.nome}}</td>
                                         <td class="listaPreco">{{reg.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
                                         <td class="text-center">
-                                            <i class="fas fa-pen mr-2 text-warning"></i>
-                                            <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
+                                            <i class="fas fa-pen mr-2 text-warning cursor-pointer px-2"></i>
+                                            <i class="fas fa-trash-alt text-danger cursor-pointer px-2" @click="excluirServico(reg.id)"></i>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -312,6 +313,32 @@
                             console.error("Erro na requisição GET:", error);
                         }
                     });
+                    
+                },
+
+                
+                excluirServico(id){
+                    let obj = this.servicos.find(item => item.id === id)
+                    let msg = `Confirma a exclusão do serviço ${obj.nome}?`
+
+                    return
+
+                    if(confirm(msg)){
+                        $.ajax({
+                            type: "POST",
+                            url: `${this.BASE_URL}api/servicos/excluir`,
+                            dataType: "json",
+                            data: {id: id},
+                            success: (data) => {
+                                this.servicos = this.servicos.filter(item => item.id !== id)
+                                alert('Categoria excluida com sucesso!')
+                            },
+                            error: (data) => {
+                                // Função a ser executada em caso de erro
+                                this.errors = data.responseJSON.errors
+                            }
+                        });
+                    }
                     
                 },
 
