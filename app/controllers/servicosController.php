@@ -35,21 +35,21 @@ class servicosController extends controllerHelper{
 
     public function apiCadastrar(){
         $validator = new Validator(modelHelper::$CRIANDO);
+        $model = new Model();
 
         $admin = $this->isLogged();
         $data = $this->post();
 
         $validator->validate($data);
 
-        echo '<pre>'; 
-        print_r($validator->getMessages());
-        echo '<br> '.__CLASS__.'| Linha: '.__LINE__. '<br>';
-        echo '<pre>'; 
-        exit;
-
-        $this->send(200, $this->post());
+        if(!empty($validator->getMessages())){
+            $this->send(400, ["errors"=>$validator->getMessages()]);
+        }else {
+            if($model->salvar($data)){
+                $this->send(200, ['servicos' => $model->buscarPorCategoria($data["idCategoria"])]);
+            }else{
+                $this->send(500);
+            }
+        }
     }
-
-    
-
 }

@@ -68,7 +68,7 @@
                                 <tbody id="servicos-area">
                                     <tr v-for="(reg, index) in servicos" :key="index">
                                         <td class="align-middle">{{reg.nome}}</td>
-                                        <td>R$20</td>
+                                        <td class="listaPreco">{{reg.preco}}</td>
                                         <td class="text-center">
                                             <i class="fas fa-pen mr-2 text-warning"></i>
                                             <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
@@ -146,9 +146,12 @@
                                 <div class="col-12 mb-3">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Descrição</label>
-                                        <div class="input-group">
-                                            <textarea v-model="servico.descricao" class="form-control" aria-label="With textarea"></textarea>
-                                        </div>
+                                        <textarea 
+                                            v-model="servico.descricao"                                             
+                                            :class="{ 'is-invalid': errors.descricao}"
+                                            @input="errors.descricao = null" 
+                                            class="form-control" 
+                                        ></textarea>
                                         <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
                                     </div>
                                 </div>
@@ -231,7 +234,8 @@
                 }
             },
             mounted() {
-                $("#precoServico").maskMoney({
+                
+                $("#precoServico, .listaPreco").maskMoney({
                     prefix:"R$",
                     decimal:",",
                     thousands:".",
@@ -260,6 +264,10 @@
                         dataType: 'json',
                         success: (response)=> {
                             // Função a ser executada em caso de sucesso
+                            this.servicos = response.servicos
+                            this.limparServico()
+                            $("#modalCadastroServico").modal("hide")
+                            alert("Serviço cadastrado com sucesso!")
                         
                         },
                         error: (error) => {
@@ -268,6 +276,7 @@
                             console.log(this.errors);
                         }
                     });
+                    
                 },
 
                 editar(id){
@@ -296,12 +305,14 @@
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
                         success: (data) => {
                             this.lista.categorias = data.lista.categorias
+                            
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
                             console.error("Erro na requisição GET:", error);
                         }
                     });
+                    
                 },
 
                 buscarServicos(){
@@ -318,12 +329,16 @@
                         data: {idCategoria: idCategoria},
                         success: (data) => {
                             this.servicos = data.servicos
+                            
+                            
+                            
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
                             console.error("Erro na requisição GET:", data);
                         }
                     });
+                     
                 },
 
                 scrollHandleFuncionarios(event){

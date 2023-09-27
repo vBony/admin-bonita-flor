@@ -2,6 +2,7 @@
 namespace models\validators;
 use models\Servico as Model;
 use core\modelHelper as Helper;
+use models\Categoria;
 
 class Servico {
     public $messages = [];
@@ -20,6 +21,7 @@ class Servico {
         $this->nome($data);
         $this->preco($data);
         $this->duracao($data);
+        $this->descricao($data);
     }
 
     public function getMessages(){
@@ -73,6 +75,45 @@ class Servico {
 
     public function duracao($data){
         $duracao = isset($data['duracao']) ? $data['duracao'] : null;
-        
+
+        if(empty($duracao)){
+            $this->messages["duracao"] = $this->emptyMessage;
+        }else{
+            $duracaoArr = explode(":", $duracao);
+            $mensagem =  "Siga o seguinte padrão HH:MM";
+            if(count($duracaoArr) == 2){
+                if(strlen($duracaoArr[0]) < 2 || strlen($duracaoArr[1]) < 2){
+                    $this->messages['duracao'] = $mensagem;    
+                }
+            }else{
+                $this->messages['duracao'] = $mensagem;
+            }
+        }
+
+    }
+
+    public function descricao($data){
+        $descricao = isset($data['descricao']) ? $data['descricao'] : null;
+
+        if(!empty($descricao)){
+            if(strlen($descricao) > 400){
+                $this->messages['descricao'] = "Limite de texto (400 caracteres).";
+            }
+        }
+    }
+
+    public function idCategoria($data){
+        $idCategoria = isset($data['idCategoria']) ? $data['idCategoria'] : null;
+
+        if(!empty($idCategoria)){
+            $this->messages["idCategoria"] = $this->emptyMessage;
+            
+        }else{
+            $modelCategoria = new Categoria();
+            $categoria = $modelCategoria->buscar($idCategoria);
+            if(empty($categoria)){
+                $this->messages["idCategoria"] = "Categoria não existe.";
+            }
+        }
     }
 }
