@@ -71,7 +71,7 @@
                                         <td class="align-middle">{{reg.nome}}</td>
                                         <td class="listaPreco">{{reg.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
                                         <td class="text-center">
-                                            <i class="fas fa-pen mr-2 text-warning cursor-pointer px-2"></i>
+                                            <i class="fas fa-pen mr-2 text-warning cursor-pointer px-2" @click="editarServico(reg.id)"></i>
                                             <i class="fas fa-trash-alt text-danger cursor-pointer px-2" @click="excluirServico(reg.id)"></i>
                                         </td>
                                     </tr>
@@ -152,6 +152,8 @@
                                             :class="{ 'is-invalid': errors.descricao}"
                                             @input="errors.descricao = null" 
                                             class="form-control" 
+                                            style="resize: none"
+                                            rows="5"
                                         ></textarea>
                                         <div v-if="errors.descricao" class="invalid-feedback">{{errors.descricao}}</div>
                                     </div>
@@ -236,7 +238,7 @@
             },
             mounted() {
                 
-                $("#precoServico, .listaPreco").maskMoney({
+                $("#precoServico").maskMoney({
                     prefix:"R$",
                     decimal:",",
                     thousands:".",
@@ -280,13 +282,15 @@
                     
                 },
 
-                editar(id){
+                editarServico(id){
                     this.alterando = true
-                    let obj = this.categorias.find(item => item.id === id)
+                    let obj = this.servicos.find(item => item.id === id)
 
-                    this.categoria = obj
+                    this.servico = obj
+                    // $('#precoServico').val(this.servico.preco)
+                    $("#precoServico").maskMoney('mask', this.servico.preco)
 
-                    console.log(this.categoria);
+                    $('#duracaoServico').val(this.servico.duracao)
 
                     $('#modalCadastroServico').modal('show')
                 },
