@@ -68,7 +68,7 @@
                                 <tbody id="servicos-area">
                                     <tr v-for="(reg, index) in servicos" :key="index">
                                         <td class="align-middle">{{reg.nome}}</td>
-                                        <td class="listaPreco">{{reg.preco}}</td>
+                                        <td class="listaPreco">{{reg.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}}</td>
                                         <td class="text-center">
                                             <i class="fas fa-pen mr-2 text-warning"></i>
                                             <i class="fas fa-trash-alt text-danger cursor-pointer"></i>
@@ -329,9 +329,6 @@
                         data: {idCategoria: idCategoria},
                         success: (data) => {
                             this.servicos = data.servicos
-                            
-                            
-                            
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
