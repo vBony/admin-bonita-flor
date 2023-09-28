@@ -225,6 +225,7 @@
                         descricao: null,
                         preco: null, 
                         duracao: null,
+                        excluido: null
                     },
                     
                     servicos: [],
@@ -292,8 +293,7 @@
                     obj = JSON.stringify(obj)
                     this.servico = JSON.parse(obj)
 
-                    // $('#precoServico').val(this.servico.preco)
-                    $("#precoServico").maskMoney('mask', this.servico.preco)
+                    $('#precoServico').val(this.floatParaReal(this.servico.preco))
 
                     $('#duracaoServico').val(this.servico.duracao)
 
@@ -370,7 +370,33 @@
                             console.error("Erro na requisição GET:", data);
                         }
                     });
-                     
+                },
+
+                alterarServico(){
+                    let servico = this.servico
+                    servico.preco = $("#precoServico").maskMoney('unmasked')[0]
+                    servico.duracao = $("#duracaoServico").val()
+
+                    $.ajax({
+                        type: "POST",
+                        url: `${this.BASE_URL}api/servicos/alterar`,
+                        dataType: "json",
+                        data: {servico: servico},
+                        success: (data) => {
+                            let servicoAlterado = this.servicos.find(item => item.id === servico.id)
+                            Object.assign(servicoAlterado, servico);
+                            servicoAlterado.preco = $("#precoServico").maskMoney('unmasked')[0]
+                            servicoAlterado.duracao = $("#duracaoServico").val()
+                            
+                            $('#modalCadastroServico').modal('hide')
+
+                            alert('Serviço alterado com sucesso!')
+                        },
+                        error: (data, textStatus, xhr) => {
+                            // Função a ser executada em caso de erro
+                            this.errors = data.responseJSON.errors
+                        }
+                    });
                 },
 
                 scrollHandleFuncionarios(event){

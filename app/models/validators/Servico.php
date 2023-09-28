@@ -97,7 +97,7 @@ class Servico {
 
         if(!empty($descricao)){
             if(strlen($descricao) > 400){
-                $this->messages['descricao'] = "Limite de texto (400 caracteres).";
+                $this->messages['descricao'] = "Limite de texto atingido (400 caracteres).";
             }
         }
     }

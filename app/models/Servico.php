@@ -94,6 +94,37 @@ class Servico extends modelHelper{
         }
     }
 
+    public function alterar($data){
+        $sql = "UPDATE
+                    {$this->table}
+                SET
+                    descricao = :descricao,
+                    nome = :nome,
+                    preco = :preco,
+                    duracao = :duracao
+                WHERE
+                    id = :id";
+
+        $sql = $this->db->prepare($sql);
+
+        $sql->bindValue(':id', $data['id']);
+        $sql->bindValue(':descricao', $data['descricao']);
+        $sql->bindValue(':nome', $data['nome']);
+        $sql->bindValue(':preco', $data['preco']);
+        $sql->bindValue(':duracao', $data['duracao']);
+
+        try {
+            $this->db->beginTransaction();
+            $sql->execute();
+            $this->db->commit();
+
+            return true;
+        } catch(PDOException $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
+
     public function excluir($id){
         $sql = "UPDATE {$this->table} SET excluido = 1 WHERE id = :id";
         $sql = $this->db->prepare($sql);

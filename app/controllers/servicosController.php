@@ -53,6 +53,26 @@ class servicosController extends controllerHelper{
         }
     }
 
+    public function apiAlterar(){
+        $validator = new Validator(modelHelper::$ALTERANDO);
+        $model = new Model();
+
+        $admin = $this->isLogged();
+        $data = $this->post('servico');
+
+        $validator->validate($data);
+
+        if(!empty($validator->getMessages())){
+            $this->send(400, ["errors"=>$validator->getMessages()]);
+        }else {
+            if($model->alterar($data)){
+                $this->send(200, ['servicos' => $model->buscarPorCategoria($data["idCategoria"])]);
+            }else{
+                $this->send(500);
+            }
+        }
+    }
+
     public function apiExcluir(){
         $admin = $this->isLogged();
         $id = $this->post('id');
