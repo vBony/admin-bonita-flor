@@ -33,6 +33,11 @@
             <i class="fas fa-calendar-alt"></i>
             <span>Agenda</span>
         </a>
+
+        <a class="nav-link" href="<?=BASE_URL?>studio">
+            <i class="fas fa-store-alt"></i>
+            <span>Studio</span>
+        </a>
     </li>
 
     <!-- Divider -->

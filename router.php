@@ -33,3 +33,6 @@ $routes['/api/categorias/excluir'] = '/categoria/apiExcluir';
 // servicoAdmin
 $routes['/api/admin-servicos/cadastrar'] = '/adminServico/apiCadastrar';
 $routes['/api/admin-servicos/excluir'] = '/adminServico/apiExcluir';
+
+// Studio
+$routes['/studio'] = '/studio/viewIndex';
