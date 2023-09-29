@@ -89,6 +89,25 @@
 
     <?php $this->loadComponent('footer', $component)  ?>
 
+    <!-- Bootstrap core JavaScript-->
+    <script src="<?=BASE_URL?>app/assets/libs/jquery/jquery.min.js"></script>
+    <script src="<?=BASE_URL?>app/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="<?=BASE_URL?>app/assets/libs/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="<?=BASE_URL?>app/assets/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="<?=BASE_URL?>app/assets/libs/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="<?=BASE_URL?>app/assets/js/demo/chart-area-demo.js"></script>
+    <script src="<?=BASE_URL?>app/assets/js/demo/chart-pie-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <input type="hidden" id="burl" value="<?=BASE_URL?>">
+
 
     <script>
         const { createApp } = Vue
