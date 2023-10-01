@@ -40,24 +40,53 @@
 
                         <div class="col-12">
                             <h5 class="text-primary">
-                                <i class="fas fa-book mr-2"></i>
-                                <span>Agenda</span>
-                            </h5>
-
-                            <div class="col-12 mb-4">
-                                
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <h5 class="text-primary">
                                 <i class="fas fa-calendar mr-2"></i>
                                 <span>Dias de atendimento</span>
                             </h5>
-
                             <div class="col-12 mb-4">
-
-                            </div>
+                                <h6>Dias disponíveis</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" checked type="checkbox" value="" id="segunda">
+                                    <label class="form-check-label" for="segunda">
+                                        Segunda-Feira
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" checked type="checkbox" value="" id="terca">
+                                    <label class="form-check-label" for="terca">
+                                        Terça-Feira
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" checked  type="checkbox" value="" id="quarta">
+                                    <label class="form-check-label" for="quarta">
+                                        Quarta-Feira
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" checked  type="checkbox" value="" id="quinta">
+                                    <label class="form-check-label" for="quinta">
+                                        Quinta-Feira
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" checked type="checkbox" value="" id="sexta">
+                                    <label class="form-check-label" for="sexta">
+                                        Sexta-Feira
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="sabado">
+                                    <label class="form-check-label" for="sabado">
+                                        Sábado
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="domingo">
+                                    <label class="form-check-label" for="domingo">
+                                        Domingo
+                                    </label>
+                                </div>
                         </div>
 
                         <div class="col-12">
@@ -65,9 +94,34 @@
                                 <i class="fas fa-clock mr-2"></i>
                                 <span>Horário de atendimento</span>
                             </h5>
-
-                            <div class="col-12 mb-4">
-
+                            <div class="row">
+                                <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Início</label>
+                                        <input type="email" class="form-control hora" id="inicioAtendimento" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Início</label>
+                                        <input type="email" class="form-control hora" id="fimAtendimento" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                            </div>
+                            <h6 class="font-weight-bolder">Horário de almoço</h6>
+                            <div class="row ">
+                                <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Início</label>
+                                        <input type="email" class="form-control hora" id="inicioIntervalo" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Início</label>
+                                        <input type="email" class="form-control hora" id="fimIntervalo" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -76,9 +130,64 @@
                                 <i class="fas fa-map-marker-alt mr-2"></i>
                                 <span>Endereço</span>
                             </h5>
-
-                            <div class="col-12 mb-4">
-
+                            <div class="row">
+                                <div class=" col-lg-2 col-md-6 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">CEP</label>
+                                        <input 
+                                            type="cep" 
+                                            class="form-control" 
+                                            id="cep" 
+                                            @change="consultaCep()"
+                                            :class="{ 'is-invalid': errors.endereco.cep }"
+                                            @input="errors.endereco.cep = null">
+                                        <div v-if="errors.endereco.cep" class="invalid-feedback">{{errors.endereco.cep}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Endereço</label>
+                                        <input type="email" v-model="endereco.endereco" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                                <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Número</label>
+                                        <input type="email" class="form-control" v-model="endereco.numero" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class=" col-lg-6 col-md-6 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Complemento</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1" v-model="endereco.complemento" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Bairro</label>
+                                        <input type="email" v-model="endereco.bairro" class="form-control" disabled   id="exampleInputEmail1" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Cidade</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1" disabled v-model="endereco.cidade" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
+                                <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Estado</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1" disabled  v-model="endereco.estado" aria-describedby="emailHelp">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -108,6 +217,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <input type="hidden" id="burl" value="<?=BASE_URL?>">
 
+    <script src="<?=BASE_URL?>app/assets/libs/jquery.mask.js"></script> 
+
 
     <script>
         const { createApp } = Vue
@@ -115,13 +226,69 @@
         const app = {
             data() {
                 return {
-                    msg: null
+                    msg: null,
+                    endereco:{
+                        cep: null,
+                        endereco: null,
+                        numero: null,
+                        complemento: null,
+                        bairro: null,
+                        cidade: null,
+                        estado: null,
+                    },
+                    errors: {
+                        endereco:{
+                            cep: null,
+                            endereco: null,
+                            numero: null,
+                            complemento: null,
+                            bairro: null,
+                            cidade: null,
+                            estado: null,
+                        }
+                    },
+                    horarios:{
+                        horarioAtendimento: {
+                            inicio: null,
+                            fim: null,
+                        },
+                        horarioIntervalo: {
+                            incio: null,
+                            fim: null,
+                        }
+                    }
+
                 }
             },
             mounted() {
+                $("#cep").mask("99999-999")
+                $(".hora").mask("99:99")
+                $("#inicioAtendimento").val("08:00")
+                $("#fimAtendimento").val("18:00")
+                $("#inicioIntervalo").val("12:00")
+                $("#fimIntervalo").val("13:00")
             },
 
             methods: {
+                consultaCep() {
+                    this.endereco.cep = $("#cep").cleanVal();
+
+                    $.getJSON("https://viacep.com.br/ws/"+ this.endereco.cep +"/json/?callback=?", (dados)=> {
+
+                        if (!("erro" in dados)) {
+                            //Atualiza os campos com os valores da consulta.
+                            this.endereco.bairro = dados.bairro
+                            this.endereco.endereco = dados.logradouro
+                            this.endereco.cidade = dados.localidade
+                            this.endereco.estado = dados.uf
+                        } //end if.
+                        else {
+                            //CEP pesquisado não foi encontrado.
+                            this.errors.endereco.cep  = "CEP não encontrado."
+                        }
+                    });
+
+                }
             }
         }
 
