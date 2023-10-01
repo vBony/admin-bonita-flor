@@ -36,3 +36,4 @@ $routes['/api/admin-servicos/excluir'] = '/adminServico/apiExcluir';
 // Studio
 $routes['/studio'] = '/studio/viewIndex';
 $routes['/api/studio'] = '/studio/apiIndex';
+$routes['/api/studio/alterar'] = '/studio/apiAlterar';

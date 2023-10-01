@@ -3,8 +3,9 @@ namespace models\validators;
 use models\Servico as Model;
 use core\modelHelper as Helper;
 use models\Categoria;
+use helpers\Validator;
 
-class Servico {
+class Servico extends Validator{
     public $messages = [];
     private $type;
 
@@ -79,15 +80,7 @@ class Servico {
         if(empty($duracao)){
             $this->messages["duracao"] = $this->emptyMessage;
         }else{
-            $duracaoArr = explode(":", $duracao);
-            $mensagem =  "Siga o seguinte padrão HH:MM";
-            if(count($duracaoArr) == 2){
-                if(strlen($duracaoArr[0]) < 2 || strlen($duracaoArr[1]) < 2){
-                    $this->messages['duracao'] = $mensagem;    
-                }
-            }else{
-                $this->messages['duracao'] = $mensagem;
-            }
+            $this->messages["duracao"] = $this->horasMinutos($duracao);
         }
 
     }

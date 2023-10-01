@@ -3,7 +3,7 @@ namespace helpers;
 use core\modelHelper;
 use \DateTime;
 
-class DateHelper{
+class Date{
     public function diferencaDatasPorExtenso($dataFinal, $tipo = 'restante'){
         $agora = (new modelHelper())->createdAt();
 

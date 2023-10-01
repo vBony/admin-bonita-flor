@@ -146,13 +146,13 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
+                                <div class=" col-lg-4 col-md-8 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Endereço</label>
                                         <input type="email" v-model="entidade.endereco.logradouro" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                                     </div>
                                 </div>
-                                <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
+                                <div class=" col-lg-2 col-md-4 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Número</label>
                                         <input type="email" class="form-control" v-model="entidade.endereco.numero" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -160,7 +160,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class=" col-lg-6 col-md-6 col-sm-12 mb-4">
+                                <div class=" col-lg-6 col-md-12 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Complemento</label>
                                         <input type="email" class="form-control" id="exampleInputEmail1" v-model="entidade.endereco.complemento" aria-describedby="emailHelp">
@@ -168,7 +168,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
+                                <div class=" col-lg-4 col-md-8 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Bairro</label>
                                         <input type="email" v-model="entidade.endereco.bairro" class="form-control" disabled   id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -176,19 +176,23 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
+                                <div class=" col-lg-4 col-md-8 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Cidade</label>
                                         <input type="email" class="form-control" id="exampleInputEmail1" disabled v-model="entidade.endereco.cidade" aria-describedby="emailHelp">
                                     </div>
                                 </div>
-                                <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
+                                <div class=" col-lg-2 col-md-4 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Estado</label>
                                         <input type="email" class="form-control" id="exampleInputEmail1" disabled  v-model="entidade.endereco.estado" aria-describedby="emailHelp">
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-sm-12">
+                            <button class="btn btn-block btn-primary" @click="alterar()">Salvar</button>
                         </div>
                     </div>
                 </div>
@@ -282,18 +286,7 @@
                                 fim: null
                             }
                         }
-                    },
-                    horarios:{
-                        horarioAtendimento: {
-                            inicio: null,
-                            fim: null,
-                        },
-                        horarioIntervalo: {
-                            incio: null,
-                            fim: null,
-                        }
                     }
-
                 }
             },
             mounted() {
@@ -324,6 +317,31 @@
                         }
                     });
                     
+                },
+
+                alterar(){
+                    let entidade = this.entidade
+
+                    console.log(entidade);
+
+                    entidade.horarios.atendimento.inicio = $("#inicioAtendimento").val()
+                    entidade.horarios.atendimento.fim    = $("#fimAtendimento").val()
+                    entidade.horarios.intervalo.inicio   = $("#inicioIntervalo").val()
+                    entidade.horarios.intervalo.fim      = $("#fimIntervalo").val()
+
+                    $.ajax({
+                        type: "POST",
+                        url: `${this.BASE_URL}api/studio/alterar`,
+                        data: entidade,
+                        dataType: "json",
+                        success: (data) => {
+                            
+                        },
+                        error: (data) => {
+                            // Função a ser executada em caso de erro
+                            console.error("Erro na requisição GET:", error);
+                        }
+                    });
                 },
 
                 consultaCep() {
