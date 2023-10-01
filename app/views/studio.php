@@ -46,43 +46,43 @@
                             <div class="col-12 mb-4">
                                 <h6>Dias disponíveis</h6>
                                 <div class="form-check">
-                                    <input class="form-check-input" checked type="checkbox" value="" id="segunda">
+                                    <input class="form-check-input" v-model="entidade.diasAtendimento.segunda" type="checkbox" :value="true" id="segunda">
                                     <label class="form-check-label" for="segunda">
                                         Segunda-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" checked type="checkbox" value="" id="terca">
+                                    <input class="form-check-input" v-model="entidade.diasAtendimento.terca" type="checkbox" :value="true" id="terca">
                                     <label class="form-check-label" for="terca">
                                         Terça-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" checked  type="checkbox" value="" id="quarta">
+                                    <input class="form-check-input" v-model="entidade.diasAtendimento.quarta"  type="checkbox" :value="true" id="quarta">
                                     <label class="form-check-label" for="quarta">
                                         Quarta-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" checked  type="checkbox" value="" id="quinta">
+                                    <input class="form-check-input" v-model="entidade.diasAtendimento.quinta"  type="checkbox" :value="true" id="quinta">
                                     <label class="form-check-label" for="quinta">
                                         Quinta-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" checked type="checkbox" value="" id="sexta">
+                                    <input class="form-check-input" v-model="entidade.diasAtendimento.sexta" type="checkbox" :value="true" id="sexta">
                                     <label class="form-check-label" for="sexta">
                                         Sexta-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="sabado">
+                                    <input class="form-check-input" v-model="entidade.diasAtendimento.sabado" type="checkbox" :value="true" id="sabado">
                                     <label class="form-check-label" for="sabado">
                                         Sábado
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="domingo">
+                                    <input class="form-check-input" v-model="entidade.diasAtendimento.domingo" type="checkbox" :value="true" id="domingo">
                                     <label class="form-check-label" for="domingo">
                                         Domingo
                                     </label>
@@ -149,13 +149,13 @@
                                 <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Endereço</label>
-                                        <input type="email" v-model="endereco.endereco" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <input type="email" v-model="entidade.endereco.logradouro" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                                     </div>
                                 </div>
                                 <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Número</label>
-                                        <input type="email" class="form-control" v-model="endereco.numero" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <input type="email" class="form-control" v-model="entidade.endereco.numero" id="exampleInputEmail1" aria-describedby="emailHelp">
                                     </div>
                                 </div>
                             </div>
@@ -163,7 +163,7 @@
                                 <div class=" col-lg-6 col-md-6 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Complemento</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" v-model="endereco.complemento" aria-describedby="emailHelp">
+                                        <input type="email" class="form-control" id="exampleInputEmail1" v-model="entidade.endereco.complemento" aria-describedby="emailHelp">
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +171,7 @@
                                 <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Bairro</label>
-                                        <input type="email" v-model="endereco.bairro" class="form-control" disabled   id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <input type="email" v-model="entidade.endereco.bairro" class="form-control" disabled   id="exampleInputEmail1" aria-describedby="emailHelp">
                                     </div>
                                 </div>
                             </div>
@@ -179,13 +179,13 @@
                                 <div class=" col-lg-4 col-md-4 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Cidade</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" disabled v-model="endereco.cidade" aria-describedby="emailHelp">
+                                        <input type="email" class="form-control" id="exampleInputEmail1" disabled v-model="entidade.endereco.cidade" aria-describedby="emailHelp">
                                     </div>
                                 </div>
                                 <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Estado</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" disabled  v-model="endereco.estado" aria-describedby="emailHelp">
+                                        <input type="email" class="form-control" id="exampleInputEmail1" disabled  v-model="entidade.endereco.estado" aria-describedby="emailHelp">
                                     </div>
                                 </div>
                             </div>
@@ -226,15 +226,40 @@
         const app = {
             data() {
                 return {
+                    BASE_URL: $('#burl').val(),
                     msg: null,
-                    endereco:{
-                        cep: null,
-                        endereco: null,
-                        numero: null,
-                        complemento: null,
-                        bairro: null,
-                        cidade: null,
-                        estado: null,
+
+                    entidade:{
+                        endereco: {
+                            cep: null,
+                            logradouro: null,
+                            numero: null,
+                            complemento: null,
+                            bairro: null,
+                            cidade: null,
+                            estado: null,
+                        },
+
+                        horas: {
+                            atendimento: {
+                                inicio: null,
+                                fim: null
+                            },
+                            intervalo: {
+                                inicio: null,
+                                fim: null
+                            }
+                        },
+
+                        diasAtendimento: {
+                            segunda: false,
+                            terca: false,
+                            quarta: false,
+                            quinta: false,
+                            sexta: false,
+                            sabado: false,
+                            domingo: false
+                        }
                     },
                     errors: {
                         endereco:{
@@ -245,6 +270,17 @@
                             bairro: null,
                             cidade: null,
                             estado: null,
+                        },
+
+                        horas: {
+                            atendimento: {
+                                inicio: null,
+                                fim: null
+                            },
+                            intervalo: {
+                                inicio: null,
+                                fim: null
+                            }
                         }
                     },
                     horarios:{
@@ -263,24 +299,44 @@
             mounted() {
                 $("#cep").mask("99999-999")
                 $(".hora").mask("99:99")
-                $("#inicioAtendimento").val("08:00")
-                $("#fimAtendimento").val("18:00")
-                $("#inicioIntervalo").val("12:00")
-                $("#fimIntervalo").val("13:00")
+
+                this.buscarDados()
             },
 
             methods: {
-                consultaCep() {
-                    this.endereco.cep = $("#cep").cleanVal();
+                buscarDados(){
+                    $.ajax({
+                        type: "GET", // Método da requisição (GET)
+                        url: `${this.BASE_URL}api/studio`, // URL da API ou recurso
+                        dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
+                        success: (data) => {
+                            this.entidade = data
 
-                    $.getJSON("https://viacep.com.br/ws/"+ this.endereco.cep +"/json/?callback=?", (dados)=> {
+                            $("#inicioAtendimento").val(this.entidade.horarios.atendimento.inicio)
+                            $("#fimAtendimento").val(this.entidade.horarios.atendimento.fim)
+
+                            $("#inicioIntervalo").val(this.entidade.horarios.intervalo.inicio)
+                            $("#fimIntervalo").val(this.entidade.horarios.intervalo.fim)
+                        },
+                        error: (data) => {
+                            // Função a ser executada em caso de erro
+                            console.error("Erro na requisição GET:", error);
+                        }
+                    });
+                    
+                },
+
+                consultaCep() {
+                    this.entidade.endereco.cep = $("#cep").cleanVal();
+
+                    $.getJSON("https://viacep.com.br/ws/"+ this.entidade.endereco.cep +"/json/?callback=?", (dados)=> {
 
                         if (!("erro" in dados)) {
                             //Atualiza os campos com os valores da consulta.
-                            this.endereco.bairro = dados.bairro
-                            this.endereco.endereco = dados.logradouro
-                            this.endereco.cidade = dados.localidade
-                            this.endereco.estado = dados.uf
+                            this.entidade.endereco.bairro = dados.bairro
+                            this.entidade.endereco.logradouro = dados.logradouro
+                            this.entidade.endereco.cidade = dados.localidade
+                            this.entidade.endereco.estado = dados.uf
                         } //end if.
                         else {
                             //CEP pesquisado não foi encontrado.

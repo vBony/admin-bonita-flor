@@ -8,4 +8,11 @@ class studioController extends controllerHelper{
 
         $this->loadView('studio', $data);
     }
+
+    public function apiIndex(){
+        $admin = $this->isLogged();
+        $model = new Model();
+
+        $this->send(200, $model->get());
+    }
 }

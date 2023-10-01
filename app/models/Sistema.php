@@ -133,8 +133,8 @@ class Sistema extends modelHelper {
     }
 
     private function setHorasIntervaloPadrao(){
-        $this->horasIntervalo->inicio = "08:00";
-        $this->horasIntervalo->fim = "18:00";
+        $this->horasIntervalo->inicio = "12:00";
+        $this->horasIntervalo->fim = "13:00";
     }
 
     private function setDiasAtendimentoPadrao(){
