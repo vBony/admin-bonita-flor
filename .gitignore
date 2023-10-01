@@ -1,3 +1,4 @@
 .env
 .htaccess
 /vendor/
+app/config/config.json
