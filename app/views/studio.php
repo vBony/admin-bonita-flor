@@ -437,6 +437,8 @@
                         success: (data) => {
                             this.entidade = data
 
+                            $("#cep").val(this.entidade.endereco.cep)
+
                             $("#inicioAtendimento").val(this.entidade.horarios.atendimento.inicio)
                             $("#fimAtendimento").val(this.entidade.horarios.atendimento.fim)
 
@@ -465,7 +467,7 @@
                         data: entidade,
                         dataType: "json",
                         success: (data) => {
-                            
+                            alert('Dados alterados com sucesso')
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro

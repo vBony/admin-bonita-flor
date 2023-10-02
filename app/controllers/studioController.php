@@ -28,7 +28,8 @@ class studioController extends controllerHelper{
         if(!empty($validator->getMessages())){
             $this->send(400, ['errors' => $validator->getMessages()]);
         }else{
-            $this->send(200, $model->get());
+            $model->set($data);
+            $this->send(200);
         }
 
 

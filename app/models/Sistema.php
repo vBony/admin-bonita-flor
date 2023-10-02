@@ -37,6 +37,11 @@ class Sistema extends modelHelper {
         return $data;
     }
 
+    public function set($data){
+        $this->setConfig($data);
+        $this->salvarConfig();
+    }
+
     public function salvarConfig(){
         $json = array();
         $json['endereco'] = $this->endereco;
@@ -58,7 +63,7 @@ class Sistema extends modelHelper {
 
         $data = json_decode($json, true);
 
-        $this->setEndereco($data);
+        $this->setEndereco($data['endereco']);
         $this->setDiasAtendimento($data['diasAtendimento']);
         $this->setHorasAtendimento($data['horarios']['atendimento']);
         $this->setHorasIntervalo($data['horarios']['intervalo']);
@@ -66,12 +71,12 @@ class Sistema extends modelHelper {
 
     public function setEndereco(array $data){
         $cep = isset($data['cep']) ? $data['cep'] : ''; 
-        $logradouro = isset($data['logradouro']) ? $data['cep'] : ''; 
-        $numero = isset($data['numero']) ? $data['cep'] : ''; 
-        $complemento = isset($data['complemento']) ? $data['cep'] : ''; 
-        $bairro = isset($data['bairro']) ? $data['cep'] : ''; 
-        $cidade = isset($data['cidade']) ? $data['cep'] : ''; 
-        $estado = isset($data['estado']) ? $data['cep'] : ''; 
+        $logradouro = isset($data['logradouro']) ? $data['logradouro'] : ''; 
+        $numero = isset($data['numero']) ? $data['numero'] : ''; 
+        $complemento = isset($data['complemento']) ? $data['complemento'] : ''; 
+        $bairro = isset($data['bairro']) ? $data['bairro'] : ''; 
+        $cidade = isset($data['cidade']) ? $data['cidade'] : ''; 
+        $estado = isset($data['estado']) ? $data['estado'] : ''; 
 
         $this->endereco->cep = $cep;
         $this->endereco->logradouro = $logradouro;
@@ -127,6 +132,21 @@ class Sistema extends modelHelper {
         $this->setDiasAtendimentoPadrao();
         $this->setEnderecoPadrao();
     }
+
+    private function setConfig($data){
+        $endereco = $data['endereco'];
+        $diasAtendimento = $data['diasAtendimento'];
+
+        $horarios = $data['horarios'];
+        $horarioAtendimento = $horarios['atendimento'];
+        $horarioIntervalo = $horarios['intervalo'];
+
+        $this->setHorasAtendimento($horarioAtendimento);
+        $this->setHorasIntervalo($horarioIntervalo);
+        $this->setDiasAtendimento($diasAtendimento);
+        $this->setEndereco($endereco);
+    }
+
     private function setHorasAtendimentoPadrao(){
         $this->horasAtendimento->inicio = "08:00";
         $this->horasAtendimento->fim = "18:00";
