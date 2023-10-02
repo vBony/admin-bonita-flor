@@ -46,47 +46,98 @@
                             <div class="col-12 mb-4">
                                 <h6>Dias disponíveis</h6>
                                 <div class="form-check">
-                                    <input class="form-check-input" v-model="entidade.diasAtendimento.segunda" type="checkbox" :value="true" id="segunda">
+                                    <input 
+                                        class="form-check-input" 
+                                        v-model="entidade.diasAtendimento.segunda" 
+                                        type="checkbox" 
+                                        :value="true" 
+                                        id="segunda"
+                                        @input="errors.diasAtendimento = null" 
+                                    >
                                     <label class="form-check-label" for="segunda">
                                         Segunda-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" v-model="entidade.diasAtendimento.terca" type="checkbox" :value="true" id="terca">
+                                    <input 
+                                        class="form-check-input" 
+                                        v-model="entidade.diasAtendimento.terca" 
+                                        type="checkbox" 
+                                        :value="true" 
+                                        id="terca"
+                                        @input="errors.diasAtendimento = null" 
+                                    >
                                     <label class="form-check-label" for="terca">
                                         Terça-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" v-model="entidade.diasAtendimento.quarta"  type="checkbox" :value="true" id="quarta">
+                                    <input 
+                                        class="form-check-input" 
+                                        v-model="entidade.diasAtendimento.quarta"  
+                                        type="checkbox" 
+                                        :value="true" 
+                                        id="quarta"
+                                        @input="errors.diasAtendimento = null" 
+                                    >
                                     <label class="form-check-label" for="quarta">
                                         Quarta-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" v-model="entidade.diasAtendimento.quinta"  type="checkbox" :value="true" id="quinta">
+                                    <input 
+                                        class="form-check-input" 
+                                        v-model="entidade.diasAtendimento.quinta" 
+                                        type="checkbox" 
+                                        :value="true" 
+                                        id="quinta"
+                                        @input="errors.diasAtendimento = null" 
+                                    >
                                     <label class="form-check-label" for="quinta">
                                         Quinta-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" v-model="entidade.diasAtendimento.sexta" type="checkbox" :value="true" id="sexta">
+                                    <input 
+                                        class="form-check-input" 
+                                        v-model="entidade.diasAtendimento.sexta" 
+                                        type="checkbox" 
+                                        :value="true" 
+                                        id="sexta"
+                                        @input="errors.diasAtendimento = null" 
+                                    >
                                     <label class="form-check-label" for="sexta">
                                         Sexta-Feira
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" v-model="entidade.diasAtendimento.sabado" type="checkbox" :value="true" id="sabado">
+                                    <input 
+                                        class="form-check-input" 
+                                        v-model="entidade.diasAtendimento.sabado" 
+                                        type="checkbox" 
+                                        :value="true" 
+                                        id="sabado"
+                                        @input="errors.diasAtendimento = null" 
+                                    >
                                     <label class="form-check-label" for="sabado">
                                         Sábado
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" v-model="entidade.diasAtendimento.domingo" type="checkbox" :value="true" id="domingo">
+                                    <input 
+                                        class="form-check-input" 
+                                        v-model="entidade.diasAtendimento.domingo" 
+                                        type="checkbox" 
+                                        :value="true" 
+                                        id="domingo"
+                                        @input="errors.diasAtendimento = null" 
+                                    >
                                     <label class="form-check-label" for="domingo">
                                         Domingo
                                     </label>
                                 </div>
+
+                                <div v-if="errors.diasAtendimento" class="text-danger">{{errors.diasAtendimento}}</div>
                         </div>
 
                         <div class="col-12">
@@ -98,13 +149,27 @@
                                 <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Início</label>
-                                        <input type="email" class="form-control hora" id="inicioAtendimento" aria-describedby="emailHelp">
+                                        <input 
+                                            type="text" 
+                                            class="form-control hora" 
+                                            id="inicioAtendimento"
+                                            :class="{ 'is-invalid': errors.horarios.atendimento.inicio }"
+                                            @input="errors.horarios.atendimento.inicio = null"
+                                        >
+                                        <div v-if="errors.horarios.atendimento.inicio" class="invalid-feedback">{{errors.horarios.atendimento.inicio}}</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-12 mb-4">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Início</label>
-                                        <input type="email" class="form-control hora" id="fimAtendimento" aria-describedby="emailHelp">
+                                        <label for="exampleInputEmail1">Fim</label>
+                                        <input 
+                                            type="text" 
+                                            class="form-control hora" 
+                                            id="fimAtendimento" 
+                                            :class="{ 'is-invalid': errors.horarios.atendimento.fim }"
+                                            @input="errors.horarios.atendimento.fim = null"
+                                        >
+                                        <div v-if="errors.horarios.atendimento.fim" class="invalid-feedback">{{errors.horarios.atendimento.fim}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -113,13 +178,27 @@
                                 <div class=" col-lg-2 col-md-2 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Início</label>
-                                        <input type="email" class="form-control hora" id="inicioIntervalo" aria-describedby="emailHelp">
+                                        <input 
+                                            type="text" 
+                                            class="form-control hora" 
+                                            id="inicioIntervalo" 
+                                            :class="{ 'is-invalid': errors.horarios.intervalo.inicio }"
+                                            @input="errors.horarios.intervalo.inicio = null"
+                                        >
+                                        <div v-if="errors.horarios.intervalo.inicio" class="invalid-feedback">{{errors.horarios.intervalo.inicio}}</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-sm-12 mb-4">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Início</label>
-                                        <input type="email" class="form-control hora" id="fimIntervalo" aria-describedby="emailHelp">
+                                        <label for="exampleInputEmail1">Fim</label>
+                                        <input 
+                                            type="email" 
+                                            class="form-control hora" 
+                                            id="fimIntervalo"
+                                            :class="{ 'is-invalid': errors.horarios.intervalo.fim }"
+                                            @input="errors.horarios.intervalo.fim = null"
+                                        >
+                                        <div v-if="errors.horarios.intervalo.fim" class="invalid-feedback">{{errors.horarios.intervalo.fim}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -149,13 +228,29 @@
                                 <div class=" col-lg-4 col-md-8 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Endereço</label>
-                                        <input type="email" v-model="entidade.endereco.logradouro" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <input 
+                                            type="email" 
+                                            v-model="entidade.endereco.logradouro" 
+                                            class="form-control" 
+                                            id="exampleInputEmail1" 
+                                            :class="{ 'is-invalid': errors.endereco.logradouro }"
+                                            @input="errors.endereco.logradouro = null"
+                                        >
+                                        <div v-if="errors.endereco.logradouro" class="invalid-feedback">{{errors.endereco.logradouro}}</div>
                                     </div>
                                 </div>
                                 <div class=" col-lg-2 col-md-4 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Número</label>
-                                        <input type="email" class="form-control" v-model="entidade.endereco.numero" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <input 
+                                            type="email" 
+                                            class="form-control" 
+                                            v-model="entidade.endereco.numero" 
+                                            id="exampleInputEmail1" 
+                                            :class="{ 'is-invalid': errors.endereco.numero }"
+                                            @input="errors.endereco.numero = null"
+                                        >
+                                        <div v-if="errors.endereco.numero" class="invalid-feedback">{{errors.endereco.numero}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -163,7 +258,15 @@
                                 <div class=" col-lg-6 col-md-12 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Complemento</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" v-model="entidade.endereco.complemento" aria-describedby="emailHelp">
+                                        <input 
+                                            type="email" 
+                                            class="form-control" 
+                                            id="exampleInputEmail1" 
+                                            v-model="entidade.endereco.complemento" 
+                                            :class="{ 'is-invalid': errors.endereco.complemento }"
+                                            @input="errors.endereco.complemento = null"
+                                        >
+                                        <div v-if="errors.endereco.complemento" class="invalid-feedback">{{errors.endereco.complemento}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +274,15 @@
                                 <div class=" col-lg-4 col-md-8 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Bairro</label>
-                                        <input type="email" v-model="entidade.endereco.bairro" class="form-control" disabled   id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <input 
+                                            type="email" 
+                                            v-model="entidade.endereco.bairro" 
+                                            class="form-control" disabled   
+                                            id="exampleInputEmail1" 
+                                            :class="{ 'is-invalid': errors.endereco.bairro }"
+                                            @input="errors.endereco.bairro = null"
+                                        >
+                                        <div v-if="errors.endereco.bairro" class="invalid-feedback">{{errors.endereco.bairro}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -179,13 +290,32 @@
                                 <div class=" col-lg-4 col-md-8 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Cidade</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" disabled v-model="entidade.endereco.cidade" aria-describedby="emailHelp">
+                                        <input 
+                                            type="email" 
+                                            class="form-control" 
+                                            id="exampleInputEmail1" 
+                                            disabled 
+                                            v-model="entidade.endereco.cidade" 
+                                            :class="{ 'is-invalid': errors.endereco.cidade }"
+                                            @input="errors.endereco.cidade = null"
+                                        >
+                                        <div v-if="errors.endereco.cidade" class="invalid-feedback">{{errors.endereco.cidade}}</div>
                                     </div>
                                 </div>
                                 <div class=" col-lg-2 col-md-4 col-sm-12 mb-4">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Estado</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" disabled  v-model="entidade.endereco.estado" aria-describedby="emailHelp">
+                                        <input 
+                                            type="email" 
+                                            class="form-control" 
+                                            id="exampleInputEmail1" 
+                                            disabled  
+                                            v-model="entidade.endereco.estado" 
+                                            aria-describedby="emailHelp"
+                                            :class="{ 'is-invalid': errors.endereco.estado }"
+                                            @input="errors.endereco.estado = null"
+                                        >
+                                        <div v-if="errors.endereco.estado" class="invalid-feedback">{{errors.endereco.estado}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -276,7 +406,7 @@
                             estado: null,
                         },
 
-                        horas: {
+                        horarios: {
                             atendimento: {
                                 inicio: null,
                                 fim: null
@@ -285,7 +415,9 @@
                                 inicio: null,
                                 fim: null
                             }
-                        }
+                        },
+
+                        diasAtendimento: null
                     }
                 }
             },
@@ -337,7 +469,25 @@
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro
-                            console.error("Erro na requisição GET:", error);
+                            let errors = data.responseJSON.errors
+
+                            if(errors.endereco !== undefined){
+                                this.errors.endereco = errors.endereco
+                            }
+
+                            if(errors.horarios !== undefined){
+                                if(errors.horarios.atendimento !== undefined){
+                                    this.errors.horarios.atendimento = errors.horarios.atendimento
+                                }
+
+                                if(errors.horarios.intervalo !== undefined){
+                                    this.errors.horarios.intervalo = errors.horarios.intervalo
+                                }
+                            }
+
+                            if(errors.diasAtendimento !== undefined){
+                                this.errors.diasAtendimento = errors.diasAtendimento
+                            }
                         }
                     });
                 },
