@@ -374,7 +374,7 @@
                             estado: null,
                         },
 
-                        horas: {
+                        horarios: {
                             atendimento: {
                                 inicio: null,
                                 fim: null
