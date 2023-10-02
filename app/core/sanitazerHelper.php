@@ -3,7 +3,6 @@
 namespace core;
 use core\modelHelper;
 
-// TODO: MIGRAR PARA CLASSE HELPERS AS OPERAÇÕES DE DATA
 class sanitazerHelper {
     public static function xss($str){
         return htmlentities($str);
@@ -25,5 +24,15 @@ class sanitazerHelper {
         // $str = self::xss($str);
 
         return trim($str);
+    }
+
+    public static function boolVal($str){
+        if($str === true){
+            return true;
+        }elseif($str === 'true'){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -322,8 +322,6 @@
                 alterar(){
                     let entidade = this.entidade
 
-                    console.log(entidade);
-
                     entidade.horarios.atendimento.inicio = $("#inicioAtendimento").val()
                     entidade.horarios.atendimento.fim    = $("#fimAtendimento").val()
                     entidade.horarios.intervalo.inicio   = $("#inicioIntervalo").val()

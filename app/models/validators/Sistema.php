@@ -2,6 +2,7 @@
 namespace models\validators;
 use helpers\Validator;
 use \DateTime;
+use core\sanitazerHelper as Sanitazer;
 
 class Sistema extends Validator {
     public $messages = [];
@@ -22,7 +23,7 @@ class Sistema extends Validator {
         $this->endereco($data);
         $this->atendimento($data);
         $this->intervalo($data);
-        // $this->diasAtendimento();
+        $this->diasAtendimento($data);
     }
 
     public function endereco($data){
@@ -141,5 +142,21 @@ class Sistema extends Validator {
         }
 
         return $errors;
+    }
+
+    public function diasAtendimento($data){
+        $dias = $data['diasAtendimento'];
+
+        $diaPreenchido = false;
+
+        foreach($dias as $dia){
+            if(Sanitazer::boolVal($dia) === true){
+                return $diaPreenchido;
+            }
+        }
+
+        if($diaPreenchido === false){
+            $this->messages['diasAtendimento'] = "Pelo menos um dia precisa ser marcado";
+        }
     }
 }
