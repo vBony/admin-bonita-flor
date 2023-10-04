@@ -435,15 +435,24 @@
                         url: `${this.BASE_URL}api/studio`, // URL da API ou recurso
                         dataType: "json", // Tipo de dados esperado na resposta (JSON, XML, HTML, etc.)
                         success: (data) => {
-                            this.entidade = data
+                            if(data.diasAtendimento != null){
+                                this.entidade.diasAtendimento = data.diasAtendimento
+                            }
 
-                            $("#cep").val(this.entidade.endereco.cep)
+                            if(data.endereco != null){
+                                this.entidade.endereco = data.endereco
+                                $("#cep").val(this.entidade.endereco.cep)
+                            }
 
-                            $("#inicioAtendimento").val(this.entidade.horarios.atendimento.inicio)
-                            $("#fimAtendimento").val(this.entidade.horarios.atendimento.fim)
+                            if(data.horarios != null){
+                                this.entidade.horarios = data.horarios
 
-                            $("#inicioIntervalo").val(this.entidade.horarios.intervalo.inicio)
-                            $("#fimIntervalo").val(this.entidade.horarios.intervalo.fim)
+                                $("#inicioAtendimento").val(this.entidade.horarios.atendimento.inicio)
+                                $("#fimAtendimento").val(this.entidade.horarios.atendimento.fim)
+
+                                $("#inicioIntervalo").val(this.entidade.horarios.intervalo.inicio)
+                                $("#fimIntervalo").val(this.entidade.horarios.intervalo.fim)
+                            }
                         },
                         error: (data) => {
                             // Função a ser executada em caso de erro

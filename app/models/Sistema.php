@@ -1,179 +1,46 @@
 <?php
 namespace models;
-use config\entidades\DiasAtendimento;
-use config\entidades\Endereco;
-use config\entidades\Horas;
 use core\modelHelper;
+use core\sanitazerHelper;
+use models\SistemaEndereco;
+use models\SistemaHorarios;
+use models\SistemaDiasAtendimento;
 
 class Sistema extends modelHelper {
-    private $endereco;
-    private $horasAtendimento;
-    private $horasIntervalo;
-    private $diasAtendimento;
+    private $mEndereco;
+    private $mHorarios;
+    private $mDiasAtendimento;
 
-    private $diretorioJson;
-
-    public function __construct(){
-        $this->endereco = new Endereco();
-        $this->horasAtendimento = new Horas();
-        $this->horasIntervalo = new Horas();
-        $this->diasAtendimento = new DiasAtendimento();
-        $this->diretorioJson = $this->diretorioBase() . 'app/config/config.json';
-        
-        if(!file_exists($this->diretorioJson)){
-            $this->criarConfiguracaoPadrao();
-        }else{
-            $this->construirConfig();
-        }
+    public function __construct()
+    {
+        parent::__construct();
+        $this->mEndereco = new SistemaEndereco();
+        $this->mHorarios = new SistemaHorarios();
+        $this->mDiasAtendimento = new SistemaDiasAtendimento();
     }
+    
+    public function buscar(){
+        $endereco = $this->mEndereco->buscar();   
+        $horarios = $this->mHorarios->buscar();
+        $diasAtendimento = $this->mDiasAtendimento->buscar();
 
-    public function get(){
-        $data = array();
-        $data['endereco'] = (array) $this->endereco;
-        $data['horarios']['atendimento'] = (array) $this->horasAtendimento;
-        $data['horarios']['intervalo'] = (array) $this->horasIntervalo;
-        $data['diasAtendimento'] = (array) $this->diasAtendimento;
+        $data['endereco'] = !empty($endereco) ? $endereco : null;
+
+        $data['horarios']['atendimento']['inicio'] = !empty($horarios['inicioAtendimento']) ? $horarios['inicioAtendimento'] : null;
+        $data['horarios']['atendimento']['fim'] = !empty($horarios['fimAtendimento']) ? $horarios['fimAtendimento'] : null;
+        $data['horarios']['intervalo']['inicio'] = !empty($horarios['inicioIntervalo']) ? $horarios['inicioIntervalo'] : null;
+        $data['horarios']['intervalo']['fim'] = !empty($horarios['fimIntervalo']) ? $horarios['fimIntervalo'] : null;
+
+        $data['diasAtendimento'] = !empty($diasAtendimento) ? $this->intToBoolean($diasAtendimento) : null;
 
         return $data;
     }
 
-    public function set($data){
-        $this->setConfig($data);
-        $this->salvarConfig();
-    }
-
-    public function salvarConfig(){
-        $json = array();
-        $json['endereco'] = $this->endereco;
-        $json['horarios']['atendimento'] = $this->horasAtendimento;
-        $json['horarios']['intervalo'] = $this->horasIntervalo;
-        $json['diasAtendimento'] = $this->diasAtendimento;
-
-        $json = json_encode($json);
-
-        if (file_put_contents($this->diretorioJson, $json)) {
-            return true;
-        } else {
-            return false;
+    public function intToBoolean($list){
+        foreach($list as $i => $row){
+            $list[$i] = sanitazerHelper::boolVal($row);
         }
-    }
 
-    public function construirConfig(){
-        $json = file_get_contents($this->diretorioJson);
-
-        $data = json_decode($json, true);
-
-        $this->setEndereco($data['endereco']);
-        $this->setDiasAtendimento($data['diasAtendimento']);
-        $this->setHorasAtendimento($data['horarios']['atendimento']);
-        $this->setHorasIntervalo($data['horarios']['intervalo']);
-    }
-
-    public function setEndereco(array $data){
-        $cep = isset($data['cep']) ? $data['cep'] : ''; 
-        $logradouro = isset($data['logradouro']) ? $data['logradouro'] : ''; 
-        $numero = isset($data['numero']) ? $data['numero'] : ''; 
-        $complemento = isset($data['complemento']) ? $data['complemento'] : ''; 
-        $bairro = isset($data['bairro']) ? $data['bairro'] : ''; 
-        $cidade = isset($data['cidade']) ? $data['cidade'] : ''; 
-        $estado = isset($data['estado']) ? $data['estado'] : ''; 
-
-        $this->endereco->cep = $cep;
-        $this->endereco->logradouro = $logradouro;
-        $this->endereco->numero = $numero;
-        $this->endereco->complemento = $complemento;
-        $this->endereco->bairro = $bairro;
-        $this->endereco->cidade = $cidade;
-        $this->endereco->estado = $estado;
-    }
-
-    public function setHorasAtendimento(array $data){
-        $inicio = isset($data['inicio']) ? $data['inicio'] : ''; 
-        $fim = isset($data['fim']) ? $data['fim'] : ''; 
-
-        $this->horasAtendimento->inicio = $inicio;
-        $this->horasAtendimento->fim = $fim;
-    }
-
-    public function setHorasIntervalo(array $data){
-        $inicio = isset($data['inicio']) ? $data['inicio'] : ''; 
-        $fim = isset($data['fim']) ? $data['fim'] : ''; 
-
-        $this->horasIntervalo->inicio = $inicio;
-        $this->horasIntervalo->fim = $fim;
-    }
-
-    public function setDiasAtendimento(array $data){
-        $segunda = isset($data['segunda']) ? $data['segunda'] : false;
-        $terca = isset($data['terca']) ? $data['terca'] : false;
-        $quarta = isset($data['quarta']) ? $data['quarta'] : false;
-        $quinta = isset($data['quinta']) ? $data['quinta'] : false;
-        $sexta = isset($data['sexta']) ? $data['sexta'] : false;
-        $sabado = isset($data['sabado']) ? $data['sabado'] : false;
-        $domingo = isset($data['domingo']) ? $data['domingo'] : false;
-
-        $this->diasAtendimento->segunda = $segunda;
-        $this->diasAtendimento->terca = $terca;
-        $this->diasAtendimento->quarta = $quarta;
-        $this->diasAtendimento->quinta = $quinta;
-        $this->diasAtendimento->sexta = $sexta;
-        $this->diasAtendimento->sabado = $sabado;
-        $this->diasAtendimento->domingo = $domingo;
-    }
-
-    private function criarConfiguracaoPadrao(){
-        $this->setConfigPadrao();
-        $this->salvarConfig();
-    }
-
-    private function setConfigPadrao(){
-        $this->setHorasAtendimentoPadrao();
-        $this->setHorasIntervaloPadrao();
-        $this->setDiasAtendimentoPadrao();
-        $this->setEnderecoPadrao();
-    }
-
-    private function setConfig($data){
-        $endereco = $data['endereco'];
-        $diasAtendimento = $data['diasAtendimento'];
-
-        $horarios = $data['horarios'];
-        $horarioAtendimento = $horarios['atendimento'];
-        $horarioIntervalo = $horarios['intervalo'];
-
-        $this->setHorasAtendimento($horarioAtendimento);
-        $this->setHorasIntervalo($horarioIntervalo);
-        $this->setDiasAtendimento($diasAtendimento);
-        $this->setEndereco($endereco);
-    }
-
-    private function setHorasAtendimentoPadrao(){
-        $this->horasAtendimento->inicio = "08:00";
-        $this->horasAtendimento->fim = "18:00";
-    }
-
-    private function setHorasIntervaloPadrao(){
-        $this->horasIntervalo->inicio = "12:00";
-        $this->horasIntervalo->fim = "13:00";
-    }
-
-    private function setDiasAtendimentoPadrao(){
-        $this->diasAtendimento->segunda = true;
-        $this->diasAtendimento->terca = true;
-        $this->diasAtendimento->quarta = true;
-        $this->diasAtendimento->quinta = true;
-        $this->diasAtendimento->sexta = true;
-        $this->diasAtendimento->sabado = false;
-        $this->diasAtendimento->domingo = false;
-    }
-
-    private function setEnderecoPadrao(){
-        $this->endereco->cep = '';
-        $this->endereco->logradouro = '';
-        $this->endereco->numero = '';
-        $this->endereco->complemento = '';
-        $this->endereco->bairro = '';
-        $this->endereco->cidade = '';
-        $this->endereco->estado = '';
+        return $list;
     }
 }

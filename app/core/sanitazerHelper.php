@@ -31,6 +31,8 @@ class sanitazerHelper {
             return true;
         }elseif($str === 'true'){
             return true;
+        }elseif($str === 1){
+            return  true;
         }else{
             return false;
         }

@@ -22,7 +22,6 @@
     <link href="<?=BASE_URL?>app/assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="<?=BASE_URL?>app/assets/css/system.css" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
 </head>
 
 <body id="page-top">
